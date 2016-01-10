@@ -2,8 +2,9 @@ package org.gt4j.annas.graph.util;
 
 import static org.junit.Assert.assertTrue;
 
-import org.gt4j.annas.graph.DefaultWeightedEdge;
+import org.gt4j.annas.DefaultWeightedEdge;
 import org.gt4j.annas.graph.UndirectedGraph;
+import org.gt4j.annas.misc.Path;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class TestDijkstra {
 	String f = "F";// u5
 	String g = "G";// u5
 
-	GraphPath<String, DefaultWeightedEdge> gp;
+	Path<String, DefaultWeightedEdge> gp;
 
 	@Before
 	public void setUp() throws Exception {
@@ -59,7 +60,7 @@ public class TestDijkstra {
 		e1 = graph.addEdge(e, f);
 		e1.setWeight(7);
 
-		dij = new Dijkstra<String, DefaultWeightedEdge>(graph);
+		
 	}
 
 	@After
@@ -68,42 +69,48 @@ public class TestDijkstra {
 
 	@Test
 	public void AB() {
-		this.gp = dij.execute(a, b);
+		dij = new Dijkstra<String, DefaultWeightedEdge>(graph,a,b);
+		this.gp = dij.call();
 		assertTrue(gp.getLength() == 3);
 		assertTrue(gp.getDistance() == 18);
 	}
 
 	@Test
 	public void AC() {
-		this.gp = dij.execute(a, c);
+		dij = new Dijkstra<String, DefaultWeightedEdge>(graph,a,c);
+		this.gp = dij.call();
 		assertTrue(gp.getLength() == 2);
 		assertTrue(gp.getDistance() == 13);
 	}
 
 	@Test
 	public void AD() {
-		this.gp = dij.execute(a, d);
+		dij = new Dijkstra<String, DefaultWeightedEdge>(graph,a,d);
+		this.gp = dij.call();
 		assertTrue(gp.getLength() == 4);
 		assertTrue(gp.getDistance() == 20);
 	}
 
 	@Test
 	public void AE() {
-		this.gp = dij.execute(a, e);
+		dij = new Dijkstra<String, DefaultWeightedEdge>(graph,a,e);
+		this.gp = dij.call();
 		assertTrue(gp.getLength() == 3);
 		assertTrue(gp.getDistance() == 15);
 	}
 
 	@Test
 	public void AF() {
-		this.gp = dij.execute(a, f);
+		dij = new Dijkstra<String, DefaultWeightedEdge>(graph,a,f);
+		this.gp = dij.call();
 		assertTrue(gp.getLength() == 2);
 		assertTrue(gp.getDistance() == 8);
 	}
 
 	@Test
 	public void AG() {
-		this.gp = dij.execute(a, g);
+		dij = new Dijkstra<String, DefaultWeightedEdge>(graph,a,g);
+		this.gp = dij.call();
 		assertTrue(gp.getLength() == 0);
 		assertTrue(gp.getDistance() == 0);
 	}
