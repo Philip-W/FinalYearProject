@@ -40,8 +40,7 @@ public final class Utilities {
 	 * @return the complement of the given graph
 	 */
 	@SuppressWarnings("unchecked")
-	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getComplement(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getComplement(GraphInterface<V, E> graph) {
 		GraphInterface<V, E> retval = null;
 
 		try {
@@ -74,8 +73,7 @@ public final class Utilities {
 	 * @return a copy of the provided graph
 	 */
 	@SuppressWarnings("unchecked")
-	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getCopy(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getCopy(GraphInterface<V, E> graph) {
 		GraphInterface<V, E> retval = null;
 
 		try {
@@ -93,13 +91,12 @@ public final class Utilities {
 
 	/**
 	 * Gets an undirected representation of the given graph
+	 * 
 	 * @param graph
-	 * @return an undirected graph 
+	 * @return an undirected graph
 	 */
-	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getUndirected(
-			DirectedGraph<V, E> graph) {
-		GraphInterface<V, E> retval = new UndirectedGraph<>(
-				graph.getEdgeFactory());
+	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getUndirected(DirectedGraph<V, E> graph) {
+		GraphInterface<V, E> retval = new UndirectedGraph<>(graph.getEdgeFactory());
 
 		retval.addVertices(graph.getVertices());
 		for (EdgeInterface<V> e : graph.getEdges()) {
@@ -120,8 +117,7 @@ public final class Utilities {
 	 *            graph to get adjacency matrix of
 	 * @return the adjacency matrix of the given graph
 	 */
-	public static <V, E extends EdgeInterface<V>> Matrix getAdjacencyMatrix(
-			GraphInterface<V, ?> graph) {
+	public static <V, E extends EdgeInterface<V>> Matrix getAdjacencyMatrix(GraphInterface<V, ?> graph) {
 		int order = graph.getOrder();
 		double[][] adj = new double[order][order];
 
@@ -206,8 +202,8 @@ public final class Utilities {
 	 * @return The set of vertices adjacent to the given vertex (including the
 	 *         given vertex).
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getClosedNeighbourhood(
-			GraphInterface<V, E> graph, V vertex) {
+	public static <V, E extends EdgeInterface<V>> Collection<V> getClosedNeighbourhood(GraphInterface<V, E> graph,
+			V vertex) {
 		Collection<V> vertices = Utilities.getOpenNeighbourhood(graph, vertex);
 		vertices.add(vertex);
 
@@ -228,8 +224,8 @@ public final class Utilities {
 	 *            set of vertices to get closed neighbourhood of
 	 * @return A collection of vertices adjacent to a given vertex set.
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getClosedNeighbourhood(
-			GraphInterface<V, E> graph, Collection<V> vs) {
+	public static <V, E extends EdgeInterface<V>> Collection<V> getClosedNeighbourhood(GraphInterface<V, E> graph,
+			Collection<V> vs) {
 		Collection<V> vertices = Utilities.getOpenNeighbourhood(graph, vs);
 		vertices.addAll(vs);
 
@@ -253,8 +249,8 @@ public final class Utilities {
 	 * @return Gets a collection of the vertices that are within a specified
 	 *         distance from a central vertex including the central vertex.
 	 */
-	public static <V, E extends EdgeInterface<V>> Set<V> getClosedNNeighborhood(
-			GraphInterface<V, E> graph, V vertex, int n) {
+	public static <V, E extends EdgeInterface<V>> Set<V> getClosedNNeighborhood(GraphInterface<V, E> graph, V vertex,
+			int n) {
 		Set<V> neighbors = new HashSet<V>(graph.getDegree(vertex));
 		neighbors.add(vertex);
 		for (int i = 0; i < n; i++) {
@@ -280,8 +276,8 @@ public final class Utilities {
 	 *            set of vertices to get open neighbourhood of
 	 * @return A collection of vertices adjacent to a given vertex.
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getOpenNeighbourhood(
-			GraphInterface<V, E> graph, V vertex) {
+	public static <V, E extends EdgeInterface<V>> Collection<V> getOpenNeighbourhood(GraphInterface<V, E> graph,
+			V vertex) {
 		Collection<V> vertices = new LinkedHashSet<V>();
 		Set<E> edges = graph.getEdges(vertex);
 
@@ -292,7 +288,7 @@ public final class Utilities {
 				vertices.add(edge.getHead());
 			}
 		}
-
+		vertices.remove(vertex);
 		return vertices;
 	}
 
@@ -309,14 +305,14 @@ public final class Utilities {
 	 *            set of vertices to get open neighbourhood of
 	 * @return A collection of vertices adjacent to a given vertex set.
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getOpenNeighbourhood(
-			GraphInterface<V, E> graph, Collection<V> vs) {
+	public static <V, E extends EdgeInterface<V>> Collection<V> getOpenNeighbourhood(GraphInterface<V, E> graph,
+			Collection<V> vs) {
 		Collection<V> vertices = new LinkedHashSet<V>();
 
 		for (V v : vs) {
 			vertices.addAll(getOpenNeighbourhood(graph, v));
 		}
-
+		vertices.removeAll(vs);
 		return vertices;
 	}
 
@@ -337,8 +333,8 @@ public final class Utilities {
 	 * @return Gets a collection of the vertices that are within a specified
 	 *         distance from a central vertex.
 	 */
-	public static <V, E extends EdgeInterface<V>> Set<V> getOpenNNeighborhood(
-			GraphInterface<V, E> graph, V vertex, int n) {
+	public static <V, E extends EdgeInterface<V>> Set<V> getOpenNNeighborhood(GraphInterface<V, E> graph, V vertex,
+			int n) {
 		Set<V> neighbors = new HashSet<V>(graph.getDegree(vertex));
 		neighbors.add(vertex);
 		for (int i = 0; i < n; i++) {
@@ -363,10 +359,8 @@ public final class Utilities {
 	 *            input graph
 	 * @return A collection of vertices of even degree.
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getEvenDegreeVertices(
-			GraphInterface<V, E> graph) {
-		return graph.getVertices().stream()
-				.filter(p -> graph.getDegree(p) % 2 == 0)
+	public static <V, E extends EdgeInterface<V>> Collection<V> getEvenDegreeVertices(GraphInterface<V, E> graph) {
+		return graph.getVertices().stream().filter(p -> graph.getDegree(p) % 2 == 0)
 				.collect(Collectors.toCollection(ArrayList<V>::new));
 	}
 
@@ -381,11 +375,9 @@ public final class Utilities {
 	 *            input graph
 	 * @return A collection of vertices of odd degree.
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getOddDegreeVertices(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> Collection<V> getOddDegreeVertices(GraphInterface<V, E> graph) {
 
-		return graph.getVertices().stream()
-				.filter(p -> graph.getDegree(p) % 2 == 1)
+		return graph.getVertices().stream().filter(p -> graph.getDegree(p) % 2 == 1)
 				.collect(Collectors.toCollection(ArrayList<V>::new));
 	}
 
@@ -402,10 +394,9 @@ public final class Utilities {
 	 *            specified degree.
 	 * @return A collection of vertices with a specified degree
 	 */
-	public static <V, E extends EdgeInterface<V>> Collection<V> getVerticesOfDegree(
-			GraphInterface<V, E> graph, int degree) {
-		return graph.getVertices().stream()
-				.filter(p -> graph.getDegree(p) == degree)
+	public static <V, E extends EdgeInterface<V>> Collection<V> getVerticesOfDegree(GraphInterface<V, E> graph,
+			int degree) {
+		return graph.getVertices().stream().filter(p -> graph.getDegree(p) == degree)
 				.collect(Collectors.toCollection(ArrayList<V>::new));
 	}
 
@@ -420,11 +411,9 @@ public final class Utilities {
 	 *            input graph
 	 * @return minimum degree
 	 */
-	public static <V, E extends EdgeInterface<V>> int getMinimumDegree(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> int getMinimumDegree(GraphInterface<V, E> graph) {
 
-		return graph.getVertices().stream().map(p -> graph.getDegree(p))
-				.min(Double::compare).get();
+		return graph.getVertices().stream().map(p -> graph.getDegree(p)).min(Double::compare).get();
 	}
 
 	/**
@@ -438,11 +427,9 @@ public final class Utilities {
 	 *            input graph
 	 * @return maximum degree
 	 */
-	public static <V, E extends EdgeInterface<V>> int getMaximumDegree(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> int getMaximumDegree(GraphInterface<V, E> graph) {
 
-		return graph.getVertices().stream().map(p -> graph.getDegree(p))
-				.max(Double::compare).get();
+		return graph.getVertices().stream().map(p -> graph.getDegree(p)).max(Double::compare).get();
 	}
 
 	/**
@@ -456,8 +443,7 @@ public final class Utilities {
 	 *            input graph
 	 * @return diameter of the given graph
 	 */
-	public static <V, E extends EdgeInterface<V>> int getDiameter(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> int getDiameter(GraphInterface<V, E> graph) {
 		Floyd<V, E> f = new Floyd<V, E>(graph);
 		double[][] d = f.getD();
 		int max = 0;
@@ -483,8 +469,7 @@ public final class Utilities {
 	 *            input graph
 	 * @return true if the graph is empty, false otherwise.
 	 */
-	public static <V, E extends EdgeInterface<V>> boolean isEmpty(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> boolean isEmpty(GraphInterface<V, E> graph) {
 		return graph.getEdges().size() == 0;
 	}
 
@@ -503,11 +488,10 @@ public final class Utilities {
 	 *            Distance
 	 * @return Constructed graph
 	 */
-	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> constructPowerGraph(
-			GraphInterface<V, E> graph, int n) {
+	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> constructPowerGraph(GraphInterface<V, E> graph,
+			int n) {
 
-		UndirectedGraph<V, E> retval = new UndirectedGraph<V, E>(
-				graph.getEdgeFactory());
+		UndirectedGraph<V, E> retval = new UndirectedGraph<V, E>(graph.getEdgeFactory());
 		for (V v : graph.getVertices()) {
 			retval.addVertex(v);
 		}
@@ -537,21 +521,17 @@ public final class Utilities {
 	 *            input graph
 	 * @return density of a given graph
 	 */
-	public static <V, E extends EdgeInterface<V>> double getDensity(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> double getDensity(GraphInterface<V, E> graph) {
 
 		if (graph instanceof DirectedGraph) {
 			if (((DirectedGraph<V, E>) graph).allowMultipleEdges()) {
 				throw new IllegalArgumentException("Graph allows multiple edge");
 			}
-			return graph.getSize()
-					/ Math.pow(2,
-							CombinatoricUtil.nChooseK(graph.getOrder(), 2));
+			return graph.getSize() / Math.pow(2, CombinatoricUtil.nChooseK(graph.getOrder(), 2));
 		}
 
 		if (graph instanceof UndirectedGraph) {
-			return graph.getSize() / graph.getOrder() * (graph.getOrder() - 1)
-					/ 2;
+			return graph.getSize() / graph.getOrder() * (graph.getOrder() - 1) / 2;
 		}
 
 		return -1;
@@ -569,10 +549,8 @@ public final class Utilities {
 	 *            input graph
 	 * @return the mean degree of the graph
 	 */
-	public static <V, E extends EdgeInterface<V>> double getAverageDegree(
-			GraphInterface<V, E> graph) {
-		return graph.getVertices().stream().mapToInt(p -> graph.getDegree(p))
-				.average().orElse(0);
+	public static <V, E extends EdgeInterface<V>> double getAverageDegree(GraphInterface<V, E> graph) {
+		return graph.getVertices().stream().mapToInt(p -> graph.getDegree(p)).average().orElse(0);
 
 	}
 
@@ -587,11 +565,9 @@ public final class Utilities {
 	 *            input graph
 	 * @return array of longs where the degree is the index.
 	 */
-	public static <V, E extends EdgeInterface<V>> long[] getDegreeHistograph(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> long[] getDegreeHistograph(GraphInterface<V, E> graph) {
 		long[] degrees = new long[Utilities.getMaximumDegree(graph) + 1];
-		graph.getVertices().stream()
-				.collect(Collectors.groupingBy(p -> graph.getDegree(p)))
+		graph.getVertices().stream().collect(Collectors.groupingBy(p -> graph.getDegree(p)))
 				.forEach((p, l) -> degrees[p] = l.size());
 
 		return degrees;
@@ -609,11 +585,25 @@ public final class Utilities {
 	 *            input graph
 	 * @return an unsorted degree sequence.
 	 */
-	public static <V, E extends EdgeInterface<V>> long[] getDegreeSequence(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> long[] getDegreeSequence(GraphInterface<V, E> graph) {
 
-		return graph.getVertices().stream().mapToLong(p -> graph.getDegree(p))
-				.toArray();
+		return graph.getVertices().stream().mapToLong(p -> graph.getDegree(p)).toArray();
+	}
+
+	/**
+	 * Gets the degree sequence of the graph in ascending order
+	 * 
+	 * @param <V>
+	 *            Vertex type
+	 * @param <E>
+	 *            Edge type
+	 * @param graph
+	 *            input graph
+	 * @return an unsorted degree sequence.
+	 */
+	public static <V, E extends EdgeInterface<V>> long[] getDegreeSequenceAscending(GraphInterface<V, E> graph) {
+
+		return graph.getVertices().stream().mapToLong(p -> graph.getDegree(p)).sorted().toArray();
 	}
 
 	/**
@@ -631,8 +621,7 @@ public final class Utilities {
 	public static <V, E extends EdgeInterface<V>> SimpleDirectedGraph<V, E> getTransitiveClosure(
 			DirectedGraph<V, E> graph) {
 
-		SimpleDirectedGraph<V, E> retval = new SimpleDirectedGraph<>(
-				graph.getEdgeFactory());
+		SimpleDirectedGraph<V, E> retval = new SimpleDirectedGraph<>(graph.getEdgeFactory());
 
 		Set<V> vertices = graph.getVertices();
 		retval.addVertices(vertices);
@@ -688,8 +677,8 @@ public final class Utilities {
 	 *            set of vertices to check
 	 * @return true if the set is independent, false otherwise.
 	 */
-	public static <V, E extends EdgeInterface<V>> boolean isIndependentSet(
-			GraphInterface<V, E> graph, Collection<V> vertices) {
+	public static <V, E extends EdgeInterface<V>> boolean isIndependentSet(GraphInterface<V, E> graph,
+			Collection<V> vertices) {
 
 		for (V v1 : vertices) {
 			for (V v2 : vertices) {
@@ -718,8 +707,7 @@ public final class Utilities {
 	 * @return true if the set is independent, false otherwise.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <V, E extends EdgeInterface<V>> boolean isIndependentSet(
-			GraphInterface<V, E> graph, V... vertices) {
+	public static <V, E extends EdgeInterface<V>> boolean isIndependentSet(GraphInterface<V, E> graph, V... vertices) {
 
 		for (V v1 : vertices) {
 			for (V v2 : vertices) {
@@ -747,8 +735,7 @@ public final class Utilities {
 	 *            set of vertices to check
 	 * @return true if the set is a clique, false otherwise.
 	 */
-	public static <V, E extends EdgeInterface<V>> boolean isClique(
-			GraphInterface<V, E> graph, Collection<V> vertices) {
+	public static <V, E extends EdgeInterface<V>> boolean isClique(GraphInterface<V, E> graph, Collection<V> vertices) {
 
 		for (V v1 : vertices) {
 			for (V v2 : vertices) {
@@ -777,8 +764,7 @@ public final class Utilities {
 	 * @return true if the set is a clique, false otherwise.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <V, E extends EdgeInterface<V>> boolean isClique(
-			GraphInterface<V, E> graph, V... vertices) {
+	public static <V, E extends EdgeInterface<V>> boolean isClique(GraphInterface<V, E> graph, V... vertices) {
 
 		for (V v1 : vertices) {
 			for (V v2 : vertices) {
@@ -804,8 +790,7 @@ public final class Utilities {
 	 *            input graph
 	 * @return true if the set is a clique, false otherwise.
 	 */
-	public static <V, E extends EdgeInterface<V>> boolean isClique(
-			GraphInterface<V, E> graph) {
+	public static <V, E extends EdgeInterface<V>> boolean isClique(GraphInterface<V, E> graph) {
 		return Utilities.isClique(graph, graph.getVertices());
 	}
 
@@ -851,8 +836,7 @@ public final class Utilities {
 	private static <V, E extends EdgeInterface<V>> List<V> getVerticesInNonDescendingDegreeOrder(
 			final GraphInterface<V, E> graph) {
 
-		return graph.getVertices().stream()
-				.sorted((o1, o2) -> graph.getDegree(o1) - graph.getDegree(o2))
+		return graph.getVertices().stream().sorted((o1, o2) -> graph.getDegree(o1) - graph.getDegree(o2))
 				.collect(Collectors.toList());
 		/*
 		 * List<V> ret = new LinkedList<V>(); ret.addAll(graph.getVertices());
