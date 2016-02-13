@@ -6,8 +6,11 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.gt4j.annas.graph.EdgeInterface;
+import org.gt4j.annas.graph.GraphInterface;
+import org.gt4j.annas.graph.SimpleUndirectedGraph;
 import org.gt4j.annas.graph.UndirectedGraph;
 
 /**
@@ -113,8 +116,7 @@ public class BiconnectedComponent<V, E extends EdgeInterface<V>> implements Algo
 
 			}
 
-			if (this.parent.get(vertex) != null
-					&& this.lowpoint.get(y) >= this.depth.get(vertex)) {
+			if (this.parent.get(vertex) != null && this.lowpoint.get(y) >= this.depth.get(vertex)) {
 				if (!aps.contains(vertex)) {
 					aps.add(vertex);
 				}
@@ -122,4 +124,93 @@ public class BiconnectedComponent<V, E extends EdgeInterface<V>> implements Algo
 		}
 
 	}
+
+	public Collection<Collection<V>> getBlocks() {
+		Collection<V> arts = this.call();
+		Collection<Collection<V>> bicomps = new LinkedList<>();
+		List<V> unvisited = new ArrayList<>(this.graph.getVertices());
+		unvisited.removeAll(arts);
+
+		Collection<E> unused = new LinkedList<>(this.graph.getEdges());
+
+		while (!unvisited.isEmpty()) {
+			V start = unvisited.get(0);
+			Collection<V> comp = new LinkedList<>();
+			Stack<V> stack = new Stack<>();
+			stack.add(start);
+
+			while (!stack.empty()) {
+				V v = stack.pop();
+				comp.add(v);
+				unvisited.remove(v);
+
+				for (EdgeInterface<V> edge : this.graph.getEdges(v)) {
+					V u = edge.getOtherEndpoint(v);
+					unused.remove((E) edge);
+					if (!stack.contains(u) && unvisited.contains(u)) {
+
+						stack.push(u);
+					}
+
+					if (arts.contains(u) && !comp.contains(u)) {
+
+						comp.add(u);
+						unvisited.remove(u);
+					}
+				}
+
+			}
+			for (V v : comp) {
+				for (V u : comp) {
+					if (arts.contains(u) && arts.contains(v) && this.graph.containsEdge(v, u)) {
+						unused.remove(this.graph.getEdges(v, u).iterator().next());
+					}
+				}
+			}
+			bicomps.add(comp);
+
+		}
+		for (E e : unused) {
+			Collection<V> comp = new LinkedList<>();
+			comp.add(e.getHead());
+			comp.add(e.getTail());
+			bicomps.add(comp);
+		}
+
+		return bicomps;
+	}
+
+	@SuppressWarnings("unchecked")
+	public GraphInterface<Collection<V>, CollectionEdge<V>> getBlockGraph() {
+		@SuppressWarnings("rawtypes")
+		SimpleUndirectedGraph tree = new SimpleUndirectedGraph<>(CollectionEdge.class);
+
+		Collection<Collection<V>> blocks = this.getBlocks();
+		for (Collection<V> vs : blocks) {
+			tree.addVertex(vs);
+		}
+
+		for (Collection<V> vs : blocks) {
+			for (Collection<V> us : blocks) {
+				if (intersection(vs, us) && !us.equals(vs)) {
+					tree.addEdge(vs, us);
+				}
+			}
+		}
+
+		return tree;
+	}
+
+	private boolean intersection(Collection<V> a, Collection<V> b) {
+		List<V> list = new ArrayList<V>();
+
+		for (V t : a) {
+			if (b.contains(t)) {
+				list.add(t);
+			}
+		}
+
+		return !list.isEmpty();
+	}
+
 }

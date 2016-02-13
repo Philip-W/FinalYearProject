@@ -94,6 +94,7 @@ public class LineGraphClassifier<V, E extends EdgeInterface<V>> implements Class
 		}
 		ds = Utilities.getDegreeSequenceAscending(tmp);
 
+		this.mapping.clear();
 		if (Arrays.equals(ds, new long[] { 0 })) {
 			// a single vertex
 			Integer v1, v2;
@@ -199,6 +200,7 @@ public class LineGraphClassifier<V, E extends EdgeInterface<V>> implements Class
 			// ##################################################
 			// YOU CANT GET HERE THIS GRAPH IS NEVER A LINE GRAPH
 			// ##################################################
+			return false;
 		} else if (Arrays.equals(ds, new long[] { 1, 1, 2, 2 })) {
 			// P_4
 			this.rootgraph.resetEdges();
@@ -220,17 +222,17 @@ public class LineGraphClassifier<V, E extends EdgeInterface<V>> implements Class
 			// Sets mapping
 			Iterator<V> it = Utilities.getNonDescendingDegreeOrder(tmp).iterator();
 
-			this.mapping.put(it.next(), this.rootgraph.getEdges(v1, v1).iterator().next());
+			this.mapping.put(it.next(), this.rootgraph.getEdges(v1, v2).iterator().next());
 			V x = it.next();
 			this.mapping.put(x, this.rootgraph.getEdges(v4, v5).iterator().next());
 
 			V u = it.next();
 			if (tmp.containsEdge(u, x)) {
 				this.mapping.put(u, this.rootgraph.getEdges(v3, v4).iterator().next());
-				this.mapping.put(it.next(), this.rootgraph.getEdges(v3, v4).iterator().next());
+				this.mapping.put(it.next(), this.rootgraph.getEdges(v2, v3).iterator().next());
 			} else {
 				this.mapping.put(it.next(), this.rootgraph.getEdges(v3, v4).iterator().next());
-				this.mapping.put(u, this.rootgraph.getEdges(v3, v4).iterator().next());
+				this.mapping.put(u, this.rootgraph.getEdges(v2, v3).iterator().next());
 			}
 
 		} else if (Arrays.equals(ds, new long[] { 2, 2, 2, 2 })) {
@@ -354,6 +356,7 @@ public class LineGraphClassifier<V, E extends EdgeInterface<V>> implements Class
 	private Set<IntegerEdge> getSubGraphVertices(GraphInterface<V, E> graph, V vertex) {
 		Set<V> vs = Utilities.getOpenNeighbourhood(graph, vertex).stream()
 				.filter(v -> this.includedVertices.contains(v)).collect(Collectors.toSet());
+		vs.add(vertex);
 		return vs.stream().map(n -> this.mapping.get(n)).collect(Collectors.toSet());
 	}
 
