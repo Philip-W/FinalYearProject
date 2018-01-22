@@ -68,7 +68,7 @@ public class TestTarjan {
 		Tarjan<String, DefaultEdge> t = new Tarjan<String, DefaultEdge>(
 				this.graph);
 
-		ArrayList<ArrayList<String>> k = t.execute();
+		ArrayList<ArrayList<String>> k = (ArrayList) t.execute();
 		assertTrue(k.size() == 3);
 	}
 
