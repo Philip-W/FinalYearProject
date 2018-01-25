@@ -60,6 +60,8 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
             V minVertex = null;
             Set<E> edges =  fillInGraph.getEdges(vertex);
 
+            // find the vertex m(v) = u with the minimum ordering such that an edge
+            // v -> u exists
             for (Iterator<E> it = edges.iterator(); it.hasNext();){
                 E edge = it.next();
                 if (minVertex == null){
@@ -67,22 +69,22 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                     continue;
                 }
                 else {
-                    if (orderingMap.get(minVertex) < orderingMap.get(edge.getHead())) {
+                    if (orderingMap.get(minVertex) > orderingMap.get(edge.getHead())) {
                         minVertex = edge.getHead();
                     }
                 }
             }
 
+            // Add edges from all neighbours of vertex to the minVertex
             for (Iterator<E> it = edges.iterator(); it.hasNext();) {
                 E edge = it.next();
                 if (!edge.getHead().equals(minVertex)){
-                    fillInGraph.addEdge(minVertex, edge);
+                    fillInGraph.addEdge(minVertex, edge.getHead());
                 }
             }
         }
 
-
-        return null;
+        return fillInGraph;
     }
 
     /**
