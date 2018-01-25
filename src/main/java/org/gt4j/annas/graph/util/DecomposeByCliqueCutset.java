@@ -7,7 +7,10 @@ import org.gt4j.annas.graph.GraphInterface;
 import org.gt4j.annas.graph.SimpleUndirectedGraph;
 import org.gt4j.annas.graph.util.traverse.LexBFS;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * An implementation of a decomposition algorithm through the use of
@@ -44,7 +47,41 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         return lexBFS.getOrder();
     }
 
-    private GraphInterface<V, E> getFillInSet(){
+    private GraphInterface<V, E> getFillInSet(List<V> ordering){
+        SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) Utilities.getCopy(graph);
+
+        //Map each vertex to it's ordering value
+        HashMap<V, Integer> orderingMap = new HashMap<>();
+        for (int i = 0; i < ordering.size(); i++){
+            orderingMap.put(ordering.get(i), i);
+        }
+
+        for ( V vertex : ordering){
+            V minVertex = null;
+            Set<E> edges =  fillInGraph.getEdges(vertex);
+
+            for (Iterator<E> it = edges.iterator(); it.hasNext();){
+                E edge = it.next();
+                if (minVertex == null){
+                    minVertex = edge.getHead();
+                    continue;
+                }
+                else {
+                    if (orderingMap.get(minVertex) < orderingMap.get(edge.getHead())) {
+                        minVertex = edge.getHead();
+                    }
+                }
+            }
+
+            for (Iterator<E> it = edges.iterator(); it.hasNext();) {
+                E edge = it.next();
+                if (!edge.getHead().equals(minVertex)){
+                    fillInGraph.addEdge(minVertex, edge);
+                }
+            }
+        }
+
+
         return null;
     }
 
@@ -55,6 +92,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      */
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
+        List<V> minimalOrder = getMinimalOrdering();
+        SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
+
         //get fill in
         // Get set c(v)
         //call recursive decomposition?
