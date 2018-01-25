@@ -4,6 +4,7 @@ package org.gt4j.annas.graph.util;
 import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
 import org.gt4j.annas.graph.EdgeInterface;
 import org.gt4j.annas.graph.GraphInterface;
+import org.gt4j.annas.graph.util.traverse.LexBFS;
 
 import java.util.List;
 
@@ -30,8 +31,16 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         this.graph = inputGraph;
     }
 
+    /**
+     * Here a Lexicographic breadth first search is used to obtain
+     * a minimal ordering
+     *
+     * @return List
+     *          Contains a LexBFS ordering
+     */
     private List<V> getMinimalOrdering(){
-        return null;
+        LexBFS<V> lexBFS = new LexBFS<>(graph);
+        return lexBFS.getOrder();
     }
 
     private GraphInterface<V, E> getFillInSet(){
