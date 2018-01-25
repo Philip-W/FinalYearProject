@@ -4,6 +4,7 @@ package org.gt4j.annas.graph.util;
 import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
 import org.gt4j.annas.graph.EdgeInterface;
 import org.gt4j.annas.graph.GraphInterface;
+import org.gt4j.annas.graph.SimpleUndirectedGraph;
 import org.gt4j.annas.graph.util.traverse.LexBFS;
 
 import java.util.List;
@@ -24,10 +25,10 @@ import java.util.List;
  */
 public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
-    GraphInterface<V, E> graph;
+    SimpleUndirectedGraph<V, E> graph;
     DecompositionTreeNodeInterface treeRoot;
 
-    public DecomposeByCliqueCutset(final GraphInterface<V, E> inputGraph){
+    public DecomposeByCliqueCutset(final SimpleUndirectedGraph<V, E> inputGraph){
         this.graph = inputGraph;
     }
 
