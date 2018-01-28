@@ -25,6 +25,11 @@ import java.util.Set;
  *            Vertex type
  * @param <E>
  *            Edge type
+ *
+ * TODO:
+ * * Check time complexity of fill in, thorough test
+ * * Consider reducing length of fill in method
+ * * Copy input graph
  */
 public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
@@ -47,30 +52,40 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         return lexBFS.getOrder();
     }
 
-    private GraphInterface<V, E> getFillInSet(List<V> ordering){
-        SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) Utilities.getCopy(graph);
+    /**
+     *
+     * @param ordering
+     * @return GraphInterface
+     *          Copy of the input graph with additional fill in edges
+     */
+    protected GraphInterface<V, E> getFillInSet(List<V> ordering){
+        //SimpleUndirectedGraph<V, E> fillInGraph = (SimpleUndirectedGraph<V, E>) Utilities.getCopy(graph);
+        SimpleUndirectedGraph<V, E> fillInGraph = graph;
 
         //Map each vertex to it's ordering value
         HashMap<V, Integer> orderingMap = new HashMap<>();
         for (int i = 0; i < ordering.size(); i++){
-            orderingMap.put(ordering.get(i), i);
+            orderingMap.put(ordering.get(i), i+ 1);
         }
 
-        for ( V vertex : ordering){
-            V minVertex = null;
+        for (V vertex : ordering){
+
+            V minVertex = ordering.get(ordering.size() -1 );
             Set<E> edges =  fillInGraph.getEdges(vertex);
 
             // find the vertex m(v) = u with the minimum ordering such that an edge
             // v -> u exists
             for (Iterator<E> it = edges.iterator(); it.hasNext();){
                 E edge = it.next();
+                if (orderingMap.get(edge.getOtherEndpoint(vertex)) <
+                        orderingMap.get(vertex)){ continue; }
                 if (minVertex == null){
-                    minVertex = edge.getHead();
+                    minVertex = edge.getOtherEndpoint(vertex);
                     continue;
                 }
                 else {
-                    if (orderingMap.get(minVertex) > orderingMap.get(edge.getHead())) {
-                        minVertex = edge.getHead();
+                    if (orderingMap.get(minVertex) > orderingMap.get(edge.getOtherEndpoint(vertex))) {
+                        minVertex = edge.getOtherEndpoint(vertex);
                     }
                 }
             }
@@ -78,8 +93,10 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
             // Add edges from all neighbours of vertex to the minVertex
             for (Iterator<E> it = edges.iterator(); it.hasNext();) {
                 E edge = it.next();
-                if (!edge.getHead().equals(minVertex)){
-                    fillInGraph.addEdge(minVertex, edge.getHead());
+                if (orderingMap.get(edge.getOtherEndpoint(vertex)) <
+                        orderingMap.get(vertex)){ continue; }
+                if (!edge.getOtherEndpoint(vertex).equals(minVertex)){
+                    fillInGraph.addEdge(minVertex, edge.getOtherEndpoint(vertex));
                 }
             }
         }
