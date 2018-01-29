@@ -1,16 +1,11 @@
 package org.gt4j.annas.graph.util;
 
 
-import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
-import org.gt4j.annas.graph.EdgeInterface;
-import org.gt4j.annas.graph.GraphInterface;
-import org.gt4j.annas.graph.SimpleUndirectedGraph;
+import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.traverse.LexBFS;
+import sun.security.provider.certpath.Vertex;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An implementation of a decomposition algorithm through the use of
@@ -36,8 +31,14 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     SimpleUndirectedGraph<V, E> graph;
     DecompositionTreeNodeInterface treeRoot;
 
+    private MultiHashMap<Vertex, Vertex> cvMap;
+    private HashMap<V, Integer> orderingMap;
+
+
     public DecomposeByCliqueCutset(final SimpleUndirectedGraph<V, E> inputGraph){
         this.graph = inputGraph;
+        cvMap = new MultiHashMap<>();
+        orderingMap = new HashMap<>();
     }
 
     /**
@@ -63,7 +64,6 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         SimpleUndirectedGraph<V, E> fillInGraph = graph;
 
         //Map each vertex to it's ordering value
-        HashMap<V, Integer> orderingMap = new HashMap<>();
         for (int i = 0; i < ordering.size(); i++){
             orderingMap.put(ordering.get(i), i+ 1);
         }
@@ -105,6 +105,24 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     }
 
     /**
+     * Populates a multihash map with the sets c(v) defined as follows:
+     * C(v) = {w| ordering(w) > ordering(v) & {v, w}  belongs to the fill in graph}
+     *
+     * @param g
+     *
+     */
+    private void populateCv(SimpleUndirectedGraph<V, E> g){
+        for (V vertex : g.getVertices()){
+            for (E edge : g.getEdges(vertex)){
+                if (orderingMap.get(edge.getOtherEndpoint(vertex)) >
+                        orderingMap.get(vertex)){
+                    cvMap.put(vertex, edge.getOtherEndpoint(vertex));
+                }
+            }
+        }
+    }
+
+    /**
      *
      * @return DecompositionTreeNodeInterface
      *          This method will return the root of the tree after construction
@@ -113,8 +131,10 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         //Get Ordering
         List<V> minimalOrder = getMinimalOrdering();
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
+        //fillInGraph.re
 
-        //get fill in
+
+
         // Get set c(v)
         //call recursive decomposition?
         return treeRoot;
