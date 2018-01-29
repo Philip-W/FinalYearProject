@@ -3,6 +3,7 @@ package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.traverse.LexBFS;
+import org.gt4j.annas.util.DisjointSet;
 import sun.security.provider.certpath.Vertex;
 
 import java.util.*;
@@ -155,13 +156,18 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         for (int i = 0; i < minimalOrder.size() - 1; i++){
             currentVertex = minimalOrder.get(i);
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
-            //Set<V> n2 = new HashSet<>(neighbours);
+            Set<V> n2 = new HashSet<>(neighbours);
+            //DisjointSet<V> set = new DisjointSet<V>(n2);
+
 
             if(Utilities.isClique(inputGraph, neighbours)){
                 Set<V> A =  inputGraph.getVertices();
-                //A.removeAll(n2);
-                SimpleUndirectedGraph gPrime = (SimpleUndirectedGraph) InducedSubgraph.
-                        inducedSubgraphOf(inputGraph, neighbours);
+                DisjointSet<V> disjointSet = new DisjointSet<>(A);
+                disjointSet.removeSet((V) n2);
+
+
+                SimpleUndirectedGraph gPrime = InducedSubgraph.
+                        inducedSubgraphOf(inputGraph, A);
             }
         }
 
