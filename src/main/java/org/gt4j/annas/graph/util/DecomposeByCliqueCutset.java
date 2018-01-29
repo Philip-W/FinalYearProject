@@ -150,7 +150,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *          Recursive calls will be made each returning a new layer of the
      *          tree, ultimately returning the root.
      */
-    private DecompositionTreeNodeInterface decompose(GraphInterface<V, E> inputGraph){
+    private DecompositionTreeNodeInterface decompose(SimpleUndirectedGraph<V, E> inputGraph){
         V currentVertex;
         for (int i = 0; i < minimalOrder.size() - 1; i++){
             currentVertex = minimalOrder.get(i);
