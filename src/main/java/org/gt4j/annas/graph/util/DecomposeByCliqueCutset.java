@@ -25,6 +25,8 @@ import java.util.*;
  * * Check time complexity of fill in, thorough test
  * * Consider reducing length of fill in method
  * * Copy input graph
+ * * Induced Subgraph of SimpleUndirectedGraph
+ * * Utilities union/disjoin
  */
 public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
@@ -149,18 +151,17 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *          tree, ultimately returning the root.
      */
     private DecompositionTreeNodeInterface decompose(GraphInterface<V, E> inputGraph){
-        System.out.println(orderingMap);
         V currentVertex;
         for (int i = 0; i < minimalOrder.size() - 1; i++){
             currentVertex = minimalOrder.get(i);
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
-            Set<V> n2 = new HashSet<V>(neighbours);
+            //Set<V> n2 = new HashSet<>(neighbours);
 
             if(Utilities.isClique(inputGraph, neighbours)){
                 Set<V> A =  inputGraph.getVertices();
-                A.removeAll(n2);
+                //A.removeAll(n2);
                 SimpleUndirectedGraph gPrime = (SimpleUndirectedGraph) InducedSubgraph.
-                        inducedSubgraphOf(inputGraph, A);
+                        inducedSubgraphOf(inputGraph, neighbours);
             }
         }
 
