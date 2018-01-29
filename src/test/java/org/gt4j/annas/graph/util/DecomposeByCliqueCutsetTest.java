@@ -69,6 +69,7 @@ public class DecomposeByCliqueCutsetTest {
         assertTrue(fillIn.containsEdge(d, g));
         assertTrue(fillIn.containsEdge(e, g));
 
+        decompose.getDecomposition();
     }
     @Test
     public void testBasicFillInSet() throws  Exception {

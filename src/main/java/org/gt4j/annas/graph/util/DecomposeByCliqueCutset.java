@@ -31,8 +31,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     SimpleUndirectedGraph<V, E> graph;
     DecompositionTreeNodeInterface treeRoot;
 
-    private MultiHashMap<Vertex, Vertex> cvMap;
+    protected MultiHashMap<Vertex, Vertex> cvMap;
     private HashMap<V, Integer> orderingMap;
+    private List<V> minimalOrder;
 
 
     public DecomposeByCliqueCutset(final SimpleUndirectedGraph<V, E> inputGraph){
@@ -129,11 +130,10 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      */
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
-        List<V> minimalOrder = getMinimalOrdering();
+        minimalOrder = getMinimalOrdering();
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
-        //fillInGraph.re
-
-
+        populateCv(fillInGraph);
+        treeRoot = decompose(fillInGraph);
 
         // Get set c(v)
         //call recursive decomposition?
@@ -142,15 +142,29 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
     /**
      *
-     * @param treeNode
+     * @param inputGraph
      *          A graph
      * @return DecompositionTreeNodeInterface
      *          Recursive calls will be made each returning a new layer of the
      *          tree, ultimately returning the root.
      */
-    private DecompositionTreeNodeInterface decompose(GraphInterface<V, E> treeNode){
+    private DecompositionTreeNodeInterface decompose(GraphInterface<V, E> inputGraph){
+        System.out.println(orderingMap);
+        V currentVertex;
+        for (int i = 0; i < minimalOrder.size() - 1; i++){
+            currentVertex = minimalOrder.get(i);
+            ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
+            Set<V> n2 = new HashSet<V>(neighbours);
 
-        return null;
+            if(Utilities.isClique(inputGraph, neighbours)){
+                Set<V> A =  inputGraph.getVertices();
+                A.removeAll(n2);
+                SimpleUndirectedGraph gPrime = (SimpleUndirectedGraph) InducedSubgraph.
+                        inducedSubgraphOf(inputGraph, A);
+            }
+        }
+
+        return treeRoot;
     }
 
 
