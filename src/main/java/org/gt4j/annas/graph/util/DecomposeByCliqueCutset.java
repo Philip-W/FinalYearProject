@@ -153,6 +153,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
         Set<V> vertices  =  inputGraph.getVertices();
         List<V> bTemp;
+        DecompositionTreeNodeInterface node;
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
@@ -176,12 +177,18 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                             inducedSubgraphOf(inputGraph, gDoublePrimeSet);
 
                     List<V> updatedOrdering = SetManipulations.removeAll(ordering, setA);
-                    decompose(gDoublePrime, updatedOrdering);
+
+                    SimpleUndirectedGraph<V, E> cutsetGraph = InducedSubgraph.inducedSubgraphOf(
+                            inputGraph, neighbours);
+                    node = new DecompositionTreeInnerNode(cutsetGraph);
+                    node.addLeaf(new DecompositionTreeLeaf(gPrime));
+                    node.addChild(decompose(gDoublePrime, updatedOrdering));
+                    return node;
                 }
             }
         }
 
-        return treeRoot;
+        return new DecompositionTreeLeaf(inputGraph);
     }
 
 

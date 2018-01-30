@@ -27,18 +27,21 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         this.cutset = cutset;
     }
 
+    @Override
     public void addChild(DecompositionTreeNodeInterface node){
         if (!children.contains(node)){
             children.add(node);
         }
     }
 
+    @Override
     public void addLeaf(DecompositionTreeLeaf leaf){
         if (!leaves.contains(leaf)){
             leaves.add(leaf);
         }
     }
 
-
+    @Override
     public boolean isLeaf(){return false;}
+
 }
