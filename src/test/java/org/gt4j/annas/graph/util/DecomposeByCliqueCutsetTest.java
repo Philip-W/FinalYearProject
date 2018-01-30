@@ -93,7 +93,6 @@ public class DecomposeByCliqueCutsetTest {
         for (DecompositionTreeLeaf l : leaves) {
             System.out.println(l.getGraph().getVertices());
         }
-
     }
 
 
