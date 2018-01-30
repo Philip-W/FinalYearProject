@@ -156,7 +156,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         DecompositionTreeNodeInterface node;
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
-
+            if (neighbours == null){continue;}
             if(Utilities.isClique(inputGraph, neighbours)){
 
                List<V> setA = SetManipulations.
