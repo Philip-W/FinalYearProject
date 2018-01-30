@@ -3,7 +3,6 @@ package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.traverse.LexBFS;
-import org.gt4j.annas.util.DisjointSet;
 import org.gt4j.annas.util.SetManipulations;
 import sun.security.provider.certpath.Vertex;
 
@@ -27,8 +26,6 @@ import java.util.*;
  * * Check time complexity of fill in, thorough test
  * * Consider reducing length of fill in method
  * * Copy input graph
- * * Induced Subgraph of SimpleUndirectedGraph
- * * Utilities union/disjoin
  */
 public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
@@ -137,7 +134,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         minimalOrder = getMinimalOrdering();
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
         populateCv(fillInGraph);
-        treeRoot = decompose(fillInGraph);
+        treeRoot = decompose(fillInGraph, minimalOrder);
 
         // Get set c(v)
         //call recursive decomposition?
@@ -152,22 +149,35 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *          Recursive calls will be made each returning a new layer of the
      *          tree, ultimately returning the root.
      */
-    private DecompositionTreeNodeInterface decompose(SimpleUndirectedGraph<V, E> inputGraph){
-        V currentVertex;
-        for (int i = 0; i < minimalOrder.size() - 1; i++){
-            currentVertex = minimalOrder.get(i);
-            Collection<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
-            Set<V> n2 = new HashSet<>(neighbours);
+    private DecompositionTreeNodeInterface decompose(SimpleUndirectedGraph<V, E> inputGraph, List<V> ordering){
 
+        Set<V> vertices  =  inputGraph.getVertices();
+        List<V> bTemp;
+        for (V currentVertex: ordering){
+            ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
             if(Utilities.isClique(inputGraph, neighbours)){
-               Collection<V> a =  inputGraph.getVertices();
-                ArrayList<V> A = new ArrayList<>(a);
-                SetManipulations.removeAll(A,neighbours);
 
+               List<V> setA = SetManipulations.
+                       removeAll(vertices,neighbours);
+               if (!setA.contains(currentVertex)){ setA.add(currentVertex); }
 
-                SimpleUndirectedGraph gPrime = InducedSubgraph.
-                        inducedSubgraphOf(inputGraph, A);
+               bTemp = SetManipulations.union(neighbours, setA);
+               List<V> setB = SetManipulations.removeAll(vertices, bTemp);
+
+                if (!setB.isEmpty()){
+                    //Go decompose!
+                    List<V> gPrimeSet = SetManipulations.union(setA,neighbours);
+                    SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
+                            inputGraph, gPrimeSet);
+
+                    List<V> gDoublePrimeSet = SetManipulations.union(setB, neighbours);
+                    SimpleUndirectedGraph gDoublePrime = InducedSubgraph.
+                            inducedSubgraphOf(inputGraph, gDoublePrimeSet);
+
+                    List<V> updatedOrdering = SetManipulations.removeAll(ordering, setA);
+                    decompose(gDoublePrime, updatedOrdering);
+                }
             }
         }
 

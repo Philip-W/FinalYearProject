@@ -2,6 +2,11 @@ package org.gt4j.annas.util;
 
 import java.util.*;
 
+/**
+ * TODO
+ * * Test order preservations on lists
+ *
+ */
 public class SetManipulations {
 
     public static <V> List<V> union(Collection<V> list1, Collection<V> list2){
@@ -13,6 +18,13 @@ public class SetManipulations {
         return new ArrayList<V>(set);
     }
 
+    /**
+     * Should be order preserving on lists, test.
+     * @param mainList
+     * @param setToRemove
+     * @param <V>
+     * @return
+     */
     public static <V> List<V> removeAll(Collection<V> mainList,
                                         Collection<V> setToRemove){
 
