@@ -1,5 +1,6 @@
 package org.gt4j.annas.graph.util;
 
+import org.gt4j.annas.DefaultWeightedEdge;
 import org.gt4j.annas.graph.*;
 import org.junit.Test;
 
@@ -25,6 +26,45 @@ public class DecomposeByCliqueCutsetTest {
     String i = "I";
     String j = "J";
     String k = "K";
+
+
+    @Test
+    public void testCopy() throws  Exception {
+        testGraph1 = new SimpleUndirectedGraph<>(DefaultEdge.class);
+        testGraph1.addVertex(a);
+        testGraph1.addVertex(b);
+        testGraph1.addVertex(c);
+        testGraph1.addVertex(d);
+        testGraph1.addVertex(e);
+        testGraph1.addVertex(f);
+        testGraph1.addVertex(g);
+
+        testGraph1.addEdge(a, b);
+        testGraph1.addEdge(b, c);
+        testGraph1.addEdge(c, d);
+        testGraph1.addEdge(d, e);
+        testGraph1.addEdge(e, f);
+        testGraph1.addEdge(f, g);
+
+        SimpleUndirectedGraph<String, DefaultEdge> newGraph =
+                Utilities.getCopy(testGraph1);
+
+        assertTrue(newGraph.containsVertex(a));
+        assertTrue(newGraph.containsVertex(b));
+        assertTrue(newGraph.containsVertex(c));
+        assertTrue(newGraph.containsVertex(d));
+        assertTrue(newGraph.containsVertex(e));
+        assertTrue(newGraph.containsVertex(f));
+        assertTrue(newGraph.containsVertex(g));
+
+        assertTrue(newGraph.containsEdge(a, b));
+        assertTrue(newGraph.containsEdge(b, c));
+        assertTrue(newGraph.containsEdge(c, d));
+        assertTrue(newGraph.containsEdge(d, e));
+        assertTrue(newGraph.containsEdge(e, f));
+        assertTrue(newGraph.containsEdge(f, g));
+    }
+
 
     @Test
     public void testDecomposition() throws Exception {

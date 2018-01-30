@@ -12,11 +12,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.gt4j.annas.graph.DirectedGraph;
-import org.gt4j.annas.graph.EdgeInterface;
-import org.gt4j.annas.graph.GraphInterface;
-import org.gt4j.annas.graph.SimpleDirectedGraph;
-import org.gt4j.annas.graph.UndirectedGraph;
+import org.gt4j.annas.graph.*;
 import org.gt4j.annas.math.MathUtil;
 import org.gt4j.annas.math.Matrix;
 import org.gt4j.annas.math.combinatorics.CombinatoricUtil;
@@ -87,6 +83,17 @@ public final class Utilities {
 		}
 
 		return retval;
+	}
+
+
+	public static <V, E extends EdgeInterface<V>>SimpleUndirectedGraph<V, E> getCopy(SimpleUndirectedGraph<V, E> graph){
+		SimpleUndirectedGraph<V, E> copy = new SimpleUndirectedGraph<>((Class<E>) DefaultEdge.class);
+		copy.addVertices(graph.getVertices());
+		for (EdgeInterface<V> e : graph.getEdges()){
+			copy.addEdge(e.getTail(), e.getHead());
+		}
+
+		return copy;
 	}
 
 	/**
