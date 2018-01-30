@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.gt4j.annas.graph.EdgeInterface;
 import org.gt4j.annas.graph.GraphInterface;
+import org.gt4j.annas.graph.SimpleUndirectedGraph;
 import org.gt4j.annas.graph.UndirectedGraph;
 import org.gt4j.annas.math.combinatorics.PowersetIterator;
 
@@ -57,19 +58,53 @@ public class InducedSubgraph {
 	}
 
 	/**
-	 * Provides an iterator for induced subgraphs.
-	 * 
-	 * @param <V>
-	 *            Vertex type
-	 * @param <E>
-	 *            Edge type
+	 * Overrides the inducedSubgraph method when a simple undirected graph is
+	 * passed
+	 * return a SUG instead of a regular undirected Graph
+	 *
 	 * @param graph
-	 *            input graph
-	 * @param poss
-	 *            Set of vertices to include/exclude from the graph
-	 * @return an iterator of graphs which contains the vertices (V \ poss)
-	 *         union u where u \in powerset(poss).
+	 * @param vertices
+	 * @param <V>
+	 * @param <E>
+	 * @return
 	 */
+	public static <V, E extends EdgeInterface<V>> SimpleUndirectedGraph<V, E> inducedSubgraphOf(SimpleUndirectedGraph<V, E> graph,
+																						 Collection<V> vertices) {
+		if (!graph.getVertices().containsAll(vertices)) {
+			return null;
+		}
+
+		SimpleUndirectedGraph<V, E> g = new SimpleUndirectedGraph<>(graph.getEdgeFactory());
+
+		for (V n : vertices) {
+			g.addVertex(n);
+		}
+
+		for (E e : graph.getEdges()) {
+			V s = e.getTail();
+			V t = e.getHead();
+			if (g.containsVertex(s) && g.containsVertex(t)) {
+				g.addEdge(s, t);
+			}
+		}
+
+		return g;
+	}
+
+		/**
+         * Provides an iterator for induced subgraphs.
+         *
+         * @param <V>
+         *            Vertex type
+         * @param <E>
+         *            Edge type
+         * @param graph
+         *            input graph
+         * @param poss
+         *            Set of vertices to include/exclude from the graph
+         * @return an iterator of graphs which contains the vertices (V \ poss)
+         *         union u where u \in powerset(poss).
+         */
 	public static <V, E extends EdgeInterface<V>> Iterator<GraphInterface<V, E>> inducedSubgraphIterator(
 			final GraphInterface<V, E> graph, final List<V> poss) {
 		return new Iterator<GraphInterface<V, E>>() {

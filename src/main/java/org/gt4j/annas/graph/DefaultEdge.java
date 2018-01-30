@@ -5,7 +5,7 @@ package org.gt4j.annas.graph;
  * 
  * @author Sam Wilson
  */
-public class DefaultEdge implements EdgeInterface<String> {
+public class  DefaultEdge implements EdgeInterface<String> {
 
 	private String head;
 
