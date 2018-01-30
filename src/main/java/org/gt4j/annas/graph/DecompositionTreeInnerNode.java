@@ -44,4 +44,16 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     @Override
     public boolean isLeaf(){return false;}
 
+    public GraphInterface<V, E> getCutset(){
+        return cutset;
+    }
+
+    @Override
+    public GraphInterface getGraph() {
+        return null;
+    }
+
+    public ArrayList<DecompositionTreeLeaf> getLeaves() {
+        return leaves;
+    }
 }

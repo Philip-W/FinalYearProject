@@ -131,43 +131,57 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      */
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
-        minimalOrder = getMinimalOrdering();
+        if (minimalOrder == null){ minimalOrder = getMinimalOrdering(); }
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
         populateCv(fillInGraph);
         treeRoot = decompose(fillInGraph, minimalOrder);
 
-        // Get set c(v)
-        //call recursive decomposition?
         return treeRoot;
     }
+
+    public void setOrder(List<V> order){ minimalOrder = order; }
 
     /**
      *
      * @param inputGraph
-     *          A graph
+     * @param ordering
      * @return DecompositionTreeNodeInterface
      *          Recursive calls will be made each returning a new layer of the
      *          tree, ultimately returning the root.
      */
     private DecompositionTreeNodeInterface decompose(SimpleUndirectedGraph<V, E> inputGraph, List<V> ordering){
-
         Set<V> vertices  =  inputGraph.getVertices();
         List<V> bTemp;
         DecompositionTreeNodeInterface node;
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
+            //System.out.println(currentVertex);
+            //System.out.println(neighbours);
+            //System.out.println("-------");
             if (neighbours == null){continue;}
-            if(Utilities.isClique(inputGraph, neighbours)){
 
-               List<V> setA = SetManipulations.
-                       removeAll(vertices,neighbours);
-               if (!setA.contains(currentVertex)){ setA.add(currentVertex); }
+            if(Utilities.isClique(inputGraph, neighbours)){
+                List<V> aTemp = SetManipulations.
+                        removeAll(vertices,neighbours);
+                List<V> setA = null;
+
+                SimpleUndirectedGraph<V, E> tempGraph = InducedSubgraph.inducedSubgraphOf(
+                        inputGraph, aTemp);
+
+                Collection<Collection<V>> components = Utilities.getConnectedComponents(tempGraph);
+                for (Collection g : components){
+                    if (g.contains(currentVertex)){
+                        setA = new ArrayList<>(g);
+                    }
+
+                }
 
                bTemp = SetManipulations.union(neighbours, setA);
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
                     //Go decompose!
+                    //System.out.println("decompse");
                     List<V> gPrimeSet = SetManipulations.union(setA,neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);

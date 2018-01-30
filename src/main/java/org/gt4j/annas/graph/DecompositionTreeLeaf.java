@@ -1,5 +1,7 @@
 package org.gt4j.annas.graph;
 
+import java.util.ArrayList;
+
 public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface {
 
 
@@ -19,5 +21,20 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
 
     @Override
     public void addChild(DecompositionTreeNodeInterface n) { return; }
+
+    @Override
+    public GraphInterface getCutset() {
+        return null;
+    }
+
+    @Override
+    public GraphInterface getGraph() {
+        return leafGraph;
+    }
+
+    @Override
+    public ArrayList<DecompositionTreeLeaf> getLeaves() {
+        return null;
+    }
 }
 
