@@ -107,6 +107,7 @@ public class DecomposeByCliqueCutsetTest {
 
         testGraph1.addEdge(i, k);
         testGraph1.addEdge(i, j);
+        testGraph1.addEdge(k, f);
 
         List<String> order = new ArrayList<>();
         order.add(a);
@@ -124,15 +125,24 @@ public class DecomposeByCliqueCutsetTest {
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
         decompose.setOrder(order);
         DecompositionTreeNodeInterface root = decompose.getDecomposition();
-
-        DecompositionTreeNodeInterface temp;
-        System.out.println(root.isLeaf());
-        System.out.println(root.getCutset().getVertices());
-
-        ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
-        for (DecompositionTreeLeaf l : leaves) {
-            System.out.println(l.getGraph().getVertices());
+/*
+        int i = 0;
+        while (!root.isLeaf()){
+            System.out.printf("%s layer clique \n",  Integer.toString(i));
+            System.out.println(root.getCutset().getVertices());
+            ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
+            System.out.printf("%s layer leaf \n",  Integer.toString(i));
+            for (DecompositionTreeLeaf l : leaves) {
+                System.out.println(l.getGraph().getVertices());
+            }
+            root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+            i++;
+            System.out.println("---------------");
         }
+
+        System.out.printf("%s layer leaf \n",  Integer.toString(i));
+        System.out.println(root.getGraph().getVertices());
+*/
     }
 
 

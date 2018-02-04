@@ -63,21 +63,18 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      */
     protected GraphInterface<V, E> getFillInSet(List<V> ordering){
         SimpleUndirectedGraph<V, E> fillInGraph = Utilities.getCopy(graph);
-
         //Map each vertex to it's ordering value
         for (int i = 0; i < ordering.size(); i++){
             orderingMap.put(ordering.get(i), i+ 1);
         }
 
         for (V vertex : ordering){
-
             V minVertex = ordering.get(ordering.size() -1 );
             Set<E> edges =  fillInGraph.getEdges(vertex);
 
             // find the vertex m(v) = u with the minimum ordering such that an edge
             // v -> u exists
-            for (Iterator<E> it = edges.iterator(); it.hasNext();){
-                E edge = it.next();
+            for (E edge : edges){
                 if (orderingMap.get(edge.getOtherEndpoint(vertex)) <
                         orderingMap.get(vertex)){ continue; }
                 if (minVertex == null){
@@ -92,8 +89,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
             }
 
             // Add edges from all neighbours of vertex to the minVertex
-            for (Iterator<E> it = edges.iterator(); it.hasNext();) {
-                E edge = it.next();
+            for (E edge : edges){
                 if (orderingMap.get(edge.getOtherEndpoint(vertex)) <
                         orderingMap.get(vertex)){ continue; }
                 if (!edge.getOtherEndpoint(vertex).equals(minVertex)){
@@ -101,7 +97,6 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                 }
             }
         }
-
         return fillInGraph;
     }
 
@@ -131,9 +126,16 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(); }
+       // System.out.println(graph.getEdges());
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
+        // System.out.println(fillInGraph.getEdges());
+        //System.out.println(graph.getEdges());
         populateCv(fillInGraph);
-        treeRoot = decompose(fillInGraph, minimalOrder);
+        System.out.println(orderingMap);
+
+
+        //System.out.println(fillInGraph.getEdges());
+        treeRoot = decompose(graph, minimalOrder);
 
         return treeRoot;
     }
@@ -154,34 +156,35 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         DecompositionTreeNodeInterface node;
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
-            //System.out.println(currentVertex);
-            //System.out.println(neighbours);
-            //System.out.println("-------");
+
             if (neighbours == null){continue;}
 
             if(Utilities.isClique(inputGraph, neighbours)){
+                //System.out.println(neighbours);
                 List<V> aTemp = SetManipulations.
                         removeAll(vertices,neighbours);
                 List<V> setA = null;
 
-                SimpleUndirectedGraph<V, E> tempGraph = InducedSubgraph.inducedSubgraphOf(
+                SimpleUndirectedGraph<V, E> aTempGraph = InducedSubgraph.inducedSubgraphOf(
                         inputGraph, aTemp);
 
-                Collection<Collection<V>> components = Utilities.getConnectedComponents(tempGraph);
+                Collection<Collection<V>> components = Utilities.getConnectedComponents(aTempGraph);
                 for (Collection g : components){
                     if (g.contains(currentVertex)){
                         setA = new ArrayList<>(g);
+                        break;
                     }
-
                 }
 
                bTemp = SetManipulations.union(neighbours, setA);
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
+                    //System.out.println(neighbours);
                     //Go decompose!
-                    //System.out.println("decompse");
-                    List<V> gPrimeSet = SetManipulations.union(setA,neighbours);
+                    //System.out.println(currentVertex);
+                    //System.out.println(setB);
+                    List<V> gPrimeSet = SetManipulations.union(setA, neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);
 

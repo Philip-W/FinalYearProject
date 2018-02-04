@@ -36,5 +36,10 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
     public ArrayList<DecompositionTreeLeaf> getLeaves() {
         return null;
     }
+
+    @Override
+    public ArrayList<DecompositionTreeNodeInterface> getChildren() {
+        return null;
+    }
 }
 
