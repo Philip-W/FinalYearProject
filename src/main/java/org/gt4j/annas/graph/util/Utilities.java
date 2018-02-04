@@ -16,6 +16,7 @@ import org.gt4j.annas.graph.*;
 import org.gt4j.annas.math.MathUtil;
 import org.gt4j.annas.math.Matrix;
 import org.gt4j.annas.math.combinatorics.CombinatoricUtil;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * 
@@ -53,6 +54,21 @@ public final class Utilities {
 			}
 		}
 
+		return retval;
+	}
+
+
+	public static <V, E extends EdgeInterface<V>> SimpleUndirectedGraph<V, E> getComplement(SimpleUndirectedGraph<V, E> graph) {
+		SimpleUndirectedGraph<V, E> retval =
+				new SimpleUndirectedGraph<>((Class<E>) DefaultEdge.class);
+		retval.addVertices(graph.getVertices());
+		for (V v : graph.getVertices()) {
+			for (V u : graph.getVertices()) {
+				if (graph.getEdges(v, u).size() == 0) {
+					retval.addEdge(v, u);
+				}
+			}
+		}
 		return retval;
 	}
 

@@ -4,17 +4,26 @@ import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
 import org.gt4j.annas.graph.EdgeInterface;
 import org.gt4j.annas.graph.GraphInterface;
 import org.gt4j.annas.graph.SimpleUndirectedGraph;
+import org.gt4j.annas.graph.util.Utilities;
+
+import java.util.Collection;
 
 public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
 
+    public boolean classify(SimpleUndirectedGraph<V, E> graph) {
+        SimpleUndirectedGraph<V, E> comp = Utilities.getComplement(graph);
+        Collection components = Utilities.getConnectedComponents(comp);
 
-    @Override
-    public boolean classify(GraphInterface<V, E> graph) {
-        return false;
+        if (components.size() == 1){
+            return isLongHole(graph);
+        }
+        else{
+            return isIsomorphic(graph);
+        }
+
     }
 
     public boolean classify(DecompositionTreeNodeInterface root){
-
         return false;
     }
 
@@ -27,7 +36,15 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
      * @return
      */
     private boolean isLongHole(SimpleUndirectedGraph<V, E> graph){
-        return false;
+        if (graph.getVertices().size() < 5){
+            return false;
+        }
+        for (V v : graph.getVertices()){
+            if (graph.getDegree(v) != 2){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -39,6 +56,16 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
      * @return
      */
     private boolean isIsomorphic(SimpleUndirectedGraph<V, E> graph){
+        return false;
+    }
+
+    private boolean isTrivial(SimpleUndirectedGraph<V, E> graph){
+        if (graph.getVertices().size() == 1){  return true; }
+        return false;
+    }
+
+    @Override
+    public boolean classify(GraphInterface<V, E> graph) {
         return false;
     }
 }
