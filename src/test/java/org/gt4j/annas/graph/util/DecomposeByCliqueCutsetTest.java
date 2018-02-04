@@ -1,5 +1,6 @@
 package org.gt4j.annas.graph.util;
 
+import org.gt4j.annas.DefaultWeightedEdge;
 import org.gt4j.annas.graph.*;
 import org.junit.Test;
 
@@ -25,6 +26,45 @@ public class DecomposeByCliqueCutsetTest {
     String i = "I";
     String j = "J";
     String k = "K";
+
+
+    @Test
+    public void testCopy() throws  Exception {
+        testGraph1 = new SimpleUndirectedGraph<>(DefaultEdge.class);
+        testGraph1.addVertex(a);
+        testGraph1.addVertex(b);
+        testGraph1.addVertex(c);
+        testGraph1.addVertex(d);
+        testGraph1.addVertex(e);
+        testGraph1.addVertex(f);
+        testGraph1.addVertex(g);
+
+        testGraph1.addEdge(a, b);
+        testGraph1.addEdge(b, c);
+        testGraph1.addEdge(c, d);
+        testGraph1.addEdge(d, e);
+        testGraph1.addEdge(e, f);
+        testGraph1.addEdge(f, g);
+
+        SimpleUndirectedGraph<String, DefaultEdge> newGraph =
+                Utilities.getCopy(testGraph1);
+
+        assertTrue(newGraph.containsVertex(a));
+        assertTrue(newGraph.containsVertex(b));
+        assertTrue(newGraph.containsVertex(c));
+        assertTrue(newGraph.containsVertex(d));
+        assertTrue(newGraph.containsVertex(e));
+        assertTrue(newGraph.containsVertex(f));
+        assertTrue(newGraph.containsVertex(g));
+
+        assertTrue(newGraph.containsEdge(a, b));
+        assertTrue(newGraph.containsEdge(b, c));
+        assertTrue(newGraph.containsEdge(c, d));
+        assertTrue(newGraph.containsEdge(d, e));
+        assertTrue(newGraph.containsEdge(e, f));
+        assertTrue(newGraph.containsEdge(f, g));
+    }
+
 
     @Test
     public void testDecomposition() throws Exception {
@@ -67,6 +107,7 @@ public class DecomposeByCliqueCutsetTest {
 
         testGraph1.addEdge(i, k);
         testGraph1.addEdge(i, j);
+        testGraph1.addEdge(k, f);
 
         List<String> order = new ArrayList<>();
         order.add(a);
@@ -84,15 +125,24 @@ public class DecomposeByCliqueCutsetTest {
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
         decompose.setOrder(order);
         DecompositionTreeNodeInterface root = decompose.getDecomposition();
-
-        DecompositionTreeNodeInterface temp;
-        System.out.println(root.isLeaf());
-        System.out.println(root.getCutset().getVertices());
-
-        ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
-        for (DecompositionTreeLeaf l : leaves) {
-            System.out.println(l.getGraph().getVertices());
+/*
+        int i = 0;
+        while (!root.isLeaf()){
+            System.out.printf("%s layer clique \n",  Integer.toString(i));
+            System.out.println(root.getCutset().getVertices());
+            ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
+            System.out.printf("%s layer leaf \n",  Integer.toString(i));
+            for (DecompositionTreeLeaf l : leaves) {
+                System.out.println(l.getGraph().getVertices());
+            }
+            root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+            i++;
+            System.out.println("---------------");
         }
+
+        System.out.printf("%s layer leaf \n",  Integer.toString(i));
+        System.out.println(root.getGraph().getVertices());
+*/
     }
 
 

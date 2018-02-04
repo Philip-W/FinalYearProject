@@ -49,6 +49,11 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     }
 
     @Override
+    public ArrayList<DecompositionTreeNodeInterface> getChildren() {
+        return children;
+    }
+
+    @Override
     public GraphInterface getGraph() {
         return null;
     }
