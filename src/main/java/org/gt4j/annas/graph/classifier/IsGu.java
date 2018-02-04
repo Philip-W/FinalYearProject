@@ -12,13 +12,13 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
 
     public boolean classify(SimpleUndirectedGraph<V, E> graph) {
         SimpleUndirectedGraph<V, E> comp = Utilities.getComplement(graph);
-        Collection components = Utilities.getConnectedComponents(comp);
+        Collection<Collection<V>> components = Utilities.getConnectedComponents(comp);
 
         if (components.size() == 1){
             return isLongHole(graph);
         }
         else{
-            return isIsomorphic(graph);
+            return isIsomorphic(graph, components);
         }
 
     }
@@ -55,8 +55,16 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
      * @param graph
      * @return
      */
-    private boolean isIsomorphic(SimpleUndirectedGraph<V, E> graph){
-        return false;
+    private boolean isIsomorphic(SimpleUndirectedGraph<V, E> graph,
+                                 Collection<Collection<V>> components){
+        for (Collection<V> comp : components){
+            if (comp.size() == 1){continue;}
+            if (comp.size() == 2 && graph.containsEdge((V) comp.toArray()[0], (V)comp.toArray()[1])){
+                continue;
+            }
+            else{ return false;}
+        }
+        return true;
     }
 
     private boolean isTrivial(SimpleUndirectedGraph<V, E> graph){
