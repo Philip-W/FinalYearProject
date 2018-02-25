@@ -1,18 +1,15 @@
 package org.gt4j.annas.graph.classifier;
 
-import org.gt4j.annas.graph.DecompositionTreeNode;
-import org.gt4j.annas.graph.EdgeInterface;
-import org.gt4j.annas.graph.GraphInterface;
-import org.gt4j.annas.graph.SimpleUndirectedGraph;
+import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.Utilities;
 
 import java.util.Collection;
 
 public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
-    public enum Type {HOLE, K2 }
+    public enum Type {HOLE, K2, FALSE}
 
 
-    public boolean classify(SimpleUndirectedGraph<V, E> graph) {
+    public Type belongsToClass(SimpleUndirectedGraph<V, E> graph) {
         SimpleUndirectedGraph<V, E> complement = Utilities.getComplement(graph);
         Collection<Collection<V>> components = Utilities.
                 getConnectedComponents(complement);
@@ -24,15 +21,38 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
             else{ nonTrivial++; }
         }
         if (nonTrivial == 1){
-            return isLongHoleCondition(graph, components);
+            if (isLongHoleCondition(graph, components)){ return Type.HOLE; }
+            else{ return Type.FALSE; }
         }
         else{
-            return isIsomorphic(graph, components);
+            if (isIsomorphic(graph, components)){ return Type.K2; }
+            else { return Type.FALSE; }
         }
     }
 
-    public boolean classify(DecompositionTreeNode root){
-        return false;
+    public boolean classify(DecompositionTreeNode<V, E> root){
+        if (root == null) {return false;}
+        DecompositionTreeNode<V, E> temp = root;
+        DecompositionTreeLeaf<V, E> currentLeaf;
+        boolean isClassBu = true;
+
+        while(!temp.isLeaf()){
+            currentLeaf = temp.getLeaf();
+            currentLeaf.setBuType(belongsToClass(
+                    (SimpleUndirectedGraph<V, E>) currentLeaf.getGraph()));
+            if (currentLeaf.getBuType() == Type.FALSE){
+                isClassBu = false;
+            }
+            temp = temp.getChild();
+        }
+
+        currentLeaf = (DecompositionTreeLeaf) temp;
+        currentLeaf.setBuType(belongsToClass(
+                (SimpleUndirectedGraph<V, E>) currentLeaf.getGraph()));
+        if (currentLeaf.getBuType() == Type.FALSE){
+            isClassBu = false;
+        }
+        return isClassBu;
     }
 
     /**
@@ -56,7 +76,6 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
                 }
             }
         }
-
         return true;
     }
 
@@ -79,11 +98,6 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
             else{ return false;}
         }
         return true;
-    }
-
-    private boolean isTrivial(SimpleUndirectedGraph<V, E> graph){
-        if (graph.getVertices().size() == 1){  return true; }
-        return false;
     }
 
     @Override
