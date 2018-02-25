@@ -1,6 +1,5 @@
 package org.gt4j.annas.graph.util;
 
-import org.gt4j.annas.DefaultWeightedEdge;
 import org.gt4j.annas.graph.*;
 import org.junit.Test;
 
@@ -124,18 +123,16 @@ public class DecomposeByCliqueCutsetTest {
 
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
         decompose.setOrder(order);
-        DecompositionTreeNodeInterface root = decompose.getDecomposition();
+        DecompositionTreeNode root = decompose.getDecomposition();
 /*
         int i = 0;
         while (!root.isLeaf()){
             System.out.printf("%s layer clique \n",  Integer.toString(i));
             System.out.println(root.getCutset().getVertices());
-            ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
+            DecompositionTreeLeaf leaf = root.getLeaf();
             System.out.printf("%s layer leaf \n",  Integer.toString(i));
-            for (DecompositionTreeLeaf l : leaves) {
-                System.out.println(l.getGraph().getVertices());
-            }
-            root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+            System.out.println(leaf.getGraph().getVertices());
+            root = (DecompositionTreeNode) root.getChild();
             i++;
             System.out.println("---------------");
         }
@@ -143,6 +140,8 @@ public class DecomposeByCliqueCutsetTest {
         System.out.printf("%s layer leaf \n",  Integer.toString(i));
         System.out.println(root.getGraph().getVertices());
 */
+
+    System.out.println(root.getLeaf().getCutset().getVertices());
     }
 
 

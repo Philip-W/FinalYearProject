@@ -30,7 +30,7 @@ import java.util.*;
 public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
     SimpleUndirectedGraph<V, E> graph;
-    DecompositionTreeNodeInterface treeRoot;
+    DecompositionTreeNode treeRoot;
 
     protected MultiHashMap<Vertex, Vertex> cvMap;
     private HashMap<V, Integer> orderingMap;
@@ -120,23 +120,21 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
     /**
      *
-     * @return DecompositionTreeNodeInterface
+     * @return DecompositionTreeNode
      *          This method will return the root of the tree after construction
      */
-    private DecompositionTreeNodeInterface runDecomposition(){
+    private DecompositionTreeNode runDecomposition(){
         //Get Ordering
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(); }
        // System.out.println(graph.getEdges());
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
-        // System.out.println(fillInGraph.getEdges());
+        //System.out.println(fillInGraph.getEdges());
         //System.out.println(graph.getEdges());
         populateCv(fillInGraph);
         System.out.println(orderingMap);
 
-
         //System.out.println(fillInGraph.getEdges());
         treeRoot = decompose(graph, minimalOrder);
-
         return treeRoot;
     }
 
@@ -146,14 +144,14 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *
      * @param inputGraph
      * @param ordering
-     * @return DecompositionTreeNodeInterface
+     * @return DecompositionTreeNode
      *          Recursive calls will be made each returning a new layer of the
      *          tree, ultimately returning the root.
      */
-    private DecompositionTreeNodeInterface decompose(SimpleUndirectedGraph<V, E> inputGraph, List<V> ordering){
+    private DecompositionTreeNode decompose(SimpleUndirectedGraph<V, E> inputGraph, List<V> ordering){
         Set<V> vertices  =  inputGraph.getVertices();
         List<V> bTemp;
-        DecompositionTreeNodeInterface node;
+
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
@@ -180,10 +178,6 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
-                    //System.out.println(neighbours);
-                    //Go decompose!
-                    //System.out.println(currentVertex);
-                    //System.out.println(setB);
                     List<V> gPrimeSet = SetManipulations.union(setA, neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);
@@ -196,9 +190,10 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
                     SimpleUndirectedGraph<V, E> cutsetGraph = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, neighbours);
-                    node = new DecompositionTreeInnerNode(cutsetGraph);
-                    node.addLeaf(new DecompositionTreeLeaf(gPrime));
-                    node.addChild(decompose(gDoublePrime, updatedOrdering));
+
+                    DecompositionTreeInnerNode node = new DecompositionTreeInnerNode(cutsetGraph);
+                    node.setLeaf(new DecompositionTreeLeaf(gPrime, cutsetGraph));
+                    node.setChild(decompose(gDoublePrime, updatedOrdering));
                     return node;
                 }
             }
@@ -208,7 +203,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     }
 
 
-    public DecompositionTreeNodeInterface getDecomposition() {
+    public DecompositionTreeNode getDecomposition() {
         treeRoot = runDecomposition();
         return treeRoot;
     }
