@@ -1,6 +1,6 @@
 package org.gt4j.annas.graph.classifier;
 
-import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
+import org.gt4j.annas.graph.DecompositionTreeNode;
 import org.gt4j.annas.graph.EdgeInterface;
 import org.gt4j.annas.graph.GraphInterface;
 import org.gt4j.annas.graph.SimpleUndirectedGraph;
@@ -23,7 +23,7 @@ public class IsGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
 
     }
 
-    public boolean classify(DecompositionTreeNodeInterface root){
+    public boolean classify(DecompositionTreeNode root){
         return false;
     }
 
