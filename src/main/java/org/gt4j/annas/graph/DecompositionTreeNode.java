@@ -4,7 +4,6 @@ public class DecompositionTreeNode<V, E extends EdgeInterface<V>>{
     protected GraphInterface<V, E> graph;
     protected GraphInterface<V, E> cutset;
 
-
     public boolean isLeaf() {
         return false;
     }
