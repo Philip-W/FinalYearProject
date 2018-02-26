@@ -28,7 +28,7 @@ public class SetManipulations {
     public static <V> List<V> removeAll(Collection<V> mainList,
                                         Collection<V> setToRemove){
 
-        Set<V> set = new HashSet<V>();
+        Set<V> set = new HashSet<>();
 
         for (V v : mainList){
             if (!setToRemove.contains(v)){
@@ -36,7 +36,7 @@ public class SetManipulations {
             }
         }
 
-        return new ArrayList<V>(set);
+        return new ArrayList<>(set);
     }
 
     public static <V> List<V> intersection(Collection<V> list1, Collection<V> list2){

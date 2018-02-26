@@ -1,7 +1,11 @@
 package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.*;
+import org.gt4j.annas.util.SetManipulations;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MaximumWeightClique<V extends  WeightedVertex, E extends EdgeInterface<V>>
@@ -21,8 +25,35 @@ public class MaximumWeightClique<V extends  WeightedVertex, E extends EdgeInterf
     }
 
     private Set<V> getMaxWeightFromHole(DecompositionTreeLeaf<V, E> leaf){
-        leaf.getCutset();
-        return null;
+        Set<V> c = leaf.getCutset().getVertices();
+        Set<V> a = leaf.getGraph().getVertices();
+        List<V> cutset = new ArrayList<>(c);
+        List<V> vertices = new ArrayList<>(a);
+
+        SimpleUndirectedGraph<V, E> leafGraph =
+                (SimpleUndirectedGraph<V, E>) leaf.getGraph();
+
+        List<V> longHole = SetManipulations
+                .removeAll(vertices, cutset);
+
+        int pairValue = 0;
+        int tempweight = 0;
+        E maxEdge = null;
+        for (V vertex : longHole){
+            for (E edge : leafGraph.getEdges(vertex)){
+                tempweight = edge.getHead().getWeight() +
+                        edge.getTail().getWeight();
+                if (tempweight > pairValue){
+                    maxEdge = edge;
+                }
+            }
+        }
+
+        Set<V> maxCliqueOfLeaf = new HashSet<>(c);
+        maxCliqueOfLeaf.add(maxEdge.getHead());
+        maxCliqueOfLeaf.add(maxEdge.getTail());
+
+        return maxCliqueOfLeaf;
     }
 
     private Set<V> getMaxWeightFromK2(DecompositionTreeLeaf<V, E> leaf){
