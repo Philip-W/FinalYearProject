@@ -21,11 +21,9 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>>
         this.cutset = cutset;
     }
 
-    public GraphInterface<V, E> getLeafGraph() { return leafGraph; }
-
     public boolean isLeaf(){return true;}
 
-    public GraphInterface getGraph() {
+    public GraphInterface<V, E> getGraph() {
         return leafGraph;
     }
 
