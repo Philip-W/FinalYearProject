@@ -1,6 +1,5 @@
 package org.gt4j.annas.graph.util;
 
-import org.gt4j.annas.DefaultWeightedEdge;
 import org.gt4j.annas.graph.*;
 import org.junit.Test;
 
@@ -148,6 +147,7 @@ public class DecomposeByCliqueCutsetTest {
 
     @Test
     public void testFillInSet() throws Exception {
+        // Build  new graph
         testGraph1 = new SimpleUndirectedGraph<>(
                 DefaultEdge.class);
 
@@ -166,7 +166,8 @@ public class DecomposeByCliqueCutsetTest {
         testGraph1.addEdge(e, f);
         testGraph1.addEdge(f, g);
 
-
+        // Create a fixed order for which we know will generate a particular
+        // fill in set
         List<String> order = new ArrayList<>();
         order.add(f);
         order.add(e);
@@ -181,7 +182,7 @@ public class DecomposeByCliqueCutsetTest {
         fillIn =
                 decompose.getFillInSet(Collections.unmodifiableList(order));
 
-
+        // Ensure appropriate edges have been generated
         assertTrue(fillIn.containsEdge(a, g));
         assertTrue(fillIn.containsEdge(b, g));
         assertTrue(fillIn.containsEdge(c, g));
@@ -189,6 +190,7 @@ public class DecomposeByCliqueCutsetTest {
         assertTrue(fillIn.containsEdge(e, g));
 
     }
+
     @Test
     public void testBasicFillInSet() throws  Exception {
         testGraph1 = new SimpleUndirectedGraph<>(
@@ -204,7 +206,6 @@ public class DecomposeByCliqueCutsetTest {
         order.add(b);
         order.add(a);
         order.add(c);
-        //System.out.println(testGraph1.getEdges());
 
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
 
@@ -212,12 +213,7 @@ public class DecomposeByCliqueCutsetTest {
         fillIn =
                 decompose.getFillInSet(Collections.unmodifiableList(order));
 
-
-
-        //System.out.println(fillIn.getEdges());
         assertTrue(fillIn.containsEdge(a, c));
-
-
     }
 
 

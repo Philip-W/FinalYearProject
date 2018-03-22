@@ -61,14 +61,17 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      * @return GraphInterface
      *          Copy of the input graph with additional fill in edges
      */
-    protected GraphInterface<V, E> getFillInSet(List<V> ordering){
+    GraphInterface<V, E> getFillInSet(List<V> ordering){
         SimpleUndirectedGraph<V, E> fillInGraph = Utilities.getCopy(graph);
-        //Map each vertex to it's ordering value
+
+        //Map each vertex to it's ordering value allows fast (O(1)) association
         for (int i = 0; i < ordering.size(); i++){
-            orderingMap.put(ordering.get(i), i+ 1);
+            orderingMap.put(ordering.get(i), i + 1);
         }
 
         for (V vertex : ordering){
+            // Set to highest ordered vertex, later modified to find the lowest
+            // monotonely adjacent vertex.
             V minVertex = ordering.get(ordering.size() -1 );
             Set<E> edges =  fillInGraph.getEdges(vertex);
 
@@ -90,6 +93,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
             // Add edges from all neighbours of vertex to the minVertex
             for (E edge : edges){
+                // The algorithm only connects vertices of higher ordering
                 if (orderingMap.get(edge.getOtherEndpoint(vertex)) <
                         orderingMap.get(vertex)){ continue; }
                 if (!edge.getOtherEndpoint(vertex).equals(minVertex)){
