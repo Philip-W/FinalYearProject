@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -124,24 +125,67 @@ public class DecomposeByCliqueCutsetTest {
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
         decompose.setOrder(order);
         DecompositionTreeNodeInterface root = decompose.getDecomposition();
-/*
-        int i = 0;
-        while (!root.isLeaf()){
-            System.out.printf("%s layer clique \n",  Integer.toString(i));
-            System.out.println(root.getCutset().getVertices());
-            ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
-            System.out.printf("%s layer leaf \n",  Integer.toString(i));
-            for (DecompositionTreeLeaf l : leaves) {
-                System.out.println(l.getGraph().getVertices());
-            }
-            root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
-            i++;
-            System.out.println("---------------");
-        }
 
-        System.out.printf("%s layer leaf \n",  Integer.toString(i));
-        System.out.println(root.getGraph().getVertices());
-*/
+        /* First layer */
+        // Check cutset contents
+        Set<String> cutset =  root.getCutset().getVertices();
+        assertTrue(cutset.contains("F"));
+        assertTrue(cutset.contains("D"));
+        assertTrue(cutset.contains("C"));
+
+        // Check first leaf contents
+        ArrayList<DecompositionTreeLeaf> leaves = root.getLeaves();
+        DecompositionTreeLeaf l = leaves.get(0);
+        Set<String> v = l.getGraph().getVertices();
+        assertTrue(v.contains("F"));
+        assertTrue(v.contains("D"));
+        assertTrue(v.contains("C"));
+        assertTrue(v.contains("A"));
+
+        root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+        /* Second layer */
+        cutset =  root.getCutset().getVertices();
+
+        leaves = root.getLeaves();
+        l = leaves.get(0);
+        v = l.getGraph().getVertices();
+
+        // Check cutset
+        assertTrue(cutset.contains("C"));
+        assertTrue(cutset.contains("H"));
+        assertTrue(!cutset.contains("A"));
+
+        // Check leaf
+        assertTrue(v.contains("C"));
+        assertTrue(v.contains("G"));
+
+        root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+        /* Third Layer */
+
+        cutset =  root.getCutset().getVertices();
+        leaves = root.getLeaves();
+        l = leaves.get(0);
+        v = l.getGraph().getVertices();
+
+        // Cutset
+        assertTrue(cutset.contains("D"));
+        assertTrue(cutset.contains("I"));
+        assertTrue(!cutset.contains("A"));
+
+        // Check leaf
+        assertTrue(v.contains("E"));
+        assertTrue(v.contains("J"));
+
+        l = leaves.get(1);
+        v = l.getGraph().getVertices();
+
+        assertTrue(v.contains("C"));
+        assertTrue(v.contains("D"));
+        assertTrue(v.contains("F"));
+        assertTrue(v.contains("H"));
+        assertTrue(v.contains("I"));
+        assertTrue(v.contains("K"));
+
     }
 
 
@@ -215,8 +259,6 @@ public class DecomposeByCliqueCutsetTest {
 
         assertTrue(fillIn.containsEdge(a, c));
     }
-
-
 
 
     @Test

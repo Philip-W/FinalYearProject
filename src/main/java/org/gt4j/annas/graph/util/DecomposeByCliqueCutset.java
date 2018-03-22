@@ -130,15 +130,14 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(); }
-       // System.out.println(graph.getEdges());
+
+        // Generate fill in graph
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
-        // System.out.println(fillInGraph.getEdges());
-        //System.out.println(graph.getEdges());
+
+        // Compute the sets C(v) for each vertex
         populateCv(fillInGraph);
-        System.out.println(orderingMap);
 
-
-        //System.out.println(fillInGraph.getEdges());
+        // Run the decomposition steps, returning the tree root.
         treeRoot = decompose(graph, minimalOrder);
 
         return treeRoot;
@@ -158,13 +157,13 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         Set<V> vertices  =  inputGraph.getVertices();
         List<V> bTemp;
         DecompositionTreeNodeInterface node;
+
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
             if (neighbours == null){continue;}
 
             if(Utilities.isClique(inputGraph, neighbours)){
-                //System.out.println(neighbours);
                 List<V> aTemp = SetManipulations.
                         removeAll(vertices,neighbours);
                 List<V> setA = null;
@@ -184,10 +183,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
-                    //System.out.println(neighbours);
-                    //Go decompose!
-                    //System.out.println(currentVertex);
-                    //System.out.println(setB);
+
                     List<V> gPrimeSet = SetManipulations.union(setA, neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);
@@ -198,11 +194,13 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
                     List<V> updatedOrdering = SetManipulations.removeAll(ordering, setA);
 
-                    SimpleUndirectedGraph<V, E> cutsetGraph = InducedSubgraph.inducedSubgraphOf(
-                            inputGraph, neighbours);
+                    SimpleUndirectedGraph<V, E> cutsetGraph =
+                            InducedSubgraph.inducedSubgraphOf(inputGraph, neighbours);
                     node = new DecompositionTreeInnerNode(cutsetGraph);
                     node.addLeaf(new DecompositionTreeLeaf(gPrime));
-                    node.addChild(decompose(gDoublePrime, updatedOrdering));
+                    DecompositionTreeNodeInterface next = decompose(gDoublePrime, updatedOrdering);
+                    if (next.isLeaf()){ node.addLeaf( (DecompositionTreeLeaf) next); }
+                    else { node.addChild(next); }
                     return node;
                 }
             }
