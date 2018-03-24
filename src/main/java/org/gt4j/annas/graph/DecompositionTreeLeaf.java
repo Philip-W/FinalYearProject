@@ -17,6 +17,7 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
     private IsGu.Type BuType;
 
     private ArrayList<V> maxWeightClique;
+    private int cliqueWeight;
 
     /* For decomp leaves the cutset is the set used to seperate the leaf from
     the previous inner node
@@ -60,6 +61,12 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
     public void setMaxWeightClique(ArrayList<V> maxWeightClique) {
         this.maxWeightClique = maxWeightClique;
     }
+
+    public void setCliqueWeight(int weight){
+        cliqueWeight = weight;
+    }
+
+    public int getCliqueWeight(){ return cliqueWeight; }
 
     public ArrayList<V> getMaxWeightCliqe(){
         return maxWeightClique;
