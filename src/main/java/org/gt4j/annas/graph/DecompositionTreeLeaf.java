@@ -68,7 +68,7 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
 
     public int getCliqueWeight(){ return cliqueWeight; }
 
-    public ArrayList<V> getMaxWeightCliqe(){
+    public ArrayList<V> getMaxWeightClique(){
         return maxWeightClique;
     }
 

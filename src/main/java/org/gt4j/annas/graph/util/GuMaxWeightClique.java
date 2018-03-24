@@ -3,10 +3,8 @@ package org.gt4j.annas.graph.util;
 import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.classifier.IsGu;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 public class GuMaxWeightClique<V extends WeightedVertex,
         E extends EdgeInterface<V>> {
@@ -23,15 +21,14 @@ public class GuMaxWeightClique<V extends WeightedVertex,
         if (leaf.getBuType() == IsGu.Type.K2){
             clique = maxCliqueInK2(leaf);
         }
-        if (leaf.getBuType() == IsGu.Type.HOLE){
+        else if (leaf.getBuType() == IsGu.Type.HOLE){
             clique = maxCliqueInLongHole(leaf);
         }
         leaf.setMaxWeightClique(clique);
         int size = 0;
-
-        for (V v : clique){ size += v.getWeight();}
-
+        for (V v : clique){ size += v.getWeight(); }
         leaf.setCliqueWeight(size);
+
         return clique;
     }
 
@@ -97,7 +94,9 @@ public class GuMaxWeightClique<V extends WeightedVertex,
         ArrayList<V> maxClique = null;
         if (root.isLeaf()){
             maxClique = maxCliqueInLeaf((DecompositionTreeLeaf<V, E>) root);
+            return maxClique;
         }
+
         DecompositionTreeInnerNode<V, E> temp =
                 (DecompositionTreeInnerNode<V, E>) root;
 
@@ -109,12 +108,17 @@ public class GuMaxWeightClique<V extends WeightedVertex,
             leaves.addAll(temp.getLeaves());
         }
 
-
         for (DecompositionTreeLeaf leaf : leaves){
             maxCliqueInLeaf(leaf);
         }
 
-        return maxClique;
+        DecompositionTreeLeaf<V, E> max = leaves.get(0);
+        for (DecompositionTreeLeaf leaf : leaves){
+            if (leaf.getCliqueWeight() > max.getCliqueWeight()){
+                max = leaf;
+            }
+        }
+        return max.getMaxWeightClique();
     }
 
 }
