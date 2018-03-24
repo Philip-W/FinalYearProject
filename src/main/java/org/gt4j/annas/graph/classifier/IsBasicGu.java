@@ -56,6 +56,24 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E
         return loopCount == 1;
     }
 
+    /**
+     * Tests the following condition:
+     *  * All non-trivial anticomponents of G are isomorphic to the complement of
+     *      K_2.
+     *
+     * @return
+     */
+    private boolean isIsomorphic(){
+        for (Collection<V> comp : complementComponents){
+            if (comp.size() == 1){continue;}
+            else if (comp.size() == 2 && !graph.containsEdge((V) comp.toArray()[0], (V)comp.toArray()[1])){
+                continue;
+            }
+            else{ return false;}
+        }
+        return true;
+    }
+
 
     @Override
     public boolean classify(GraphInterface<V, E> graph) {
