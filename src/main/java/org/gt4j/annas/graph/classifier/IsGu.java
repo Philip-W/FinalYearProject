@@ -22,17 +22,22 @@ public class IsGu<V, E extends EdgeInterface<V>> {
         DecompositionTreeInnerNode<V, E> temp =
                 (DecompositionTreeInnerNode<V, E>) root;
 
-        while (!temp.isLeaf()){
+        while (temp != null && !temp.isLeaf()){
             for (DecompositionTreeLeaf leaf : temp.getLeaves()){
                 if (!classifyLeaf(leaf)){ return false; }
             }
 
             // In Tarjans algorithm there will always be only 1 non leaf component
-            // and 1 leaf
-            temp = temp.getNonLeafChildren().get(0);
+            // and 1 leaf except the final inner node which has 2 children.
+            if (temp.getNonLeafChildren().size() == 1) {
+                temp = temp.getNonLeafChildren().get(0);
+            }
+            else {
+                // At this point all leaves have been evaluated and there are
+                // no further inner nodes;
+                return true;
+            }
         }
-
-
         return false;
     }
 
