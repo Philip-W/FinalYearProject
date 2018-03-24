@@ -30,7 +30,7 @@ import java.util.*;
 public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
     SimpleUndirectedGraph<V, E> graph;
-    DecompositionTreeNodeInterface treeRoot;
+    DecompositionTreeNodeInterface<V, E> treeRoot;
 
     protected MultiHashMap<Vertex, Vertex> cvMap;
     private HashMap<V, Integer> orderingMap;

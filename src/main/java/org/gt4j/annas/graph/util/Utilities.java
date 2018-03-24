@@ -56,6 +56,21 @@ public final class Utilities {
 		return retval;
 	}
 
+    /* Same as above but specific to simple undirected graphs */
+	public static <V, E extends EdgeInterface<V>> SimpleUndirectedGraph<V, E> getComplement(SimpleUndirectedGraph<V, E> graph) {
+		SimpleUndirectedGraph<V, E> retval =
+				new SimpleUndirectedGraph<>((Class<E>) DefaultEdge.class);
+		retval.addVertices(graph.getVertices());
+		for (V v : graph.getVertices()) {
+			for (V u : graph.getVertices()) {
+				if (graph.getEdges(v, u).size() == 0) {
+					retval.addEdge(v, u);
+				}
+			}
+		}
+		return retval;
+	}
+
 	/**
 	 * Makes a copy of the graph, the copy reuses the vertices but new edges are
 	 * created.
@@ -164,7 +179,7 @@ public final class Utilities {
 		ArrayList<Collection<V>> components = new ArrayList<Collection<V>>();
 
 		Stack<V> stack = new Stack<V>();
-		List<V> Visited = new ArrayList<V>();
+		List<V> Visited = new ArrayList<>();
 
 		while (!toVisit.isEmpty()) {
 			stack.push(toVisit.get(0));
