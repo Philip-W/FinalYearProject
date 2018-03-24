@@ -17,21 +17,20 @@ import java.util.Collection;
  * @param <V>
  * @param <E>
  */
-public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
+public class IsBasicGu<V, E extends EdgeInterface<V>> implements
+        Classifier<V, E> {
 
     private DecompositionTreeLeaf<V, E> leaf;
     private GraphInterface<V, E> graph;
     private SimpleUndirectedGraph<V, E> complement;
     private Collection<Collection<V>> complementComponents;
 
-    public IsBasicGu(DecompositionTreeLeaf<V, E> leaf){
-        this.leaf = leaf;
-        graph = leaf.getGraph();
-        complement = Utilities.getComplement((SimpleUndirectedGraph<V, E>) graph);
-        complementComponents = Utilities.
-                getConnectedComponents(complement);
-    }
+    // Allows access to which type the graph was classified as.
+    private IsGu.Type lastClassifiedType;
 
+    public IsGu.Type getLastClassifiedType() {
+        return lastClassifiedType;
+    }
 
     /** Tests the following condition:
      *      * G has exactly one nontrivial anticomponent, and this anticomponent
@@ -63,7 +62,7 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E
      *
      * @return
      */
-    private boolean isIsomorphic(){
+    private boolean isIsomorphicToK2(){
         for (Collection<V> comp : complementComponents){
             if (comp.size() == 1){continue;}
             else if (comp.size() == 2 && !graph.containsEdge((V) comp.toArray()[0], (V)comp.toArray()[1])){
@@ -75,8 +74,25 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E
     }
 
 
+    /** Input should be a simple undirected graph */
     @Override
     public boolean classify(GraphInterface<V, E> graph) {
-        return false;
+        this.graph = graph;
+        complement = Utilities.getComplement((SimpleUndirectedGraph<V, E>) graph);
+        complementComponents = Utilities.
+                getConnectedComponents(complement);
+
+        if (isIsomorphicToK2()){
+            lastClassifiedType = IsGu.Type.K2;
+            return true;
+        }
+        else if (isLongHoleCondition()) {
+            lastClassifiedType = IsGu.Type.HOLE;
+            return true;
+        }
+        else {
+            lastClassifiedType = IsGu.Type.FALSE;
+            return false;
+        }
     }
 }
