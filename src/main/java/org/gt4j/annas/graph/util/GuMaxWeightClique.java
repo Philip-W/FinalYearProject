@@ -5,9 +5,10 @@ import org.gt4j.annas.graph.classifier.IsGu;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 public class GuMaxWeightClique<V extends WeightedVertex,
-        E extends EdgeInterface<V>> {
+        E extends EdgeInterface<V>> implements  MaximumCliqueInterface<V>{
 
     /**
      * Sets the max weight clique of the given leaf (storing it in the leaf)
@@ -90,7 +91,7 @@ public class GuMaxWeightClique<V extends WeightedVertex,
         return clique;
     }
 
-    public ArrayList<V> getMaxClique(DecompositionTreeNodeInterface<V, E> root){
+    private ArrayList<V> getMaxClique(DecompositionTreeNodeInterface<V, E> root){
         ArrayList<V> maxClique = null;
         if (root.isLeaf()){
             maxClique = maxCliqueInLeaf((DecompositionTreeLeaf<V, E>) root);
@@ -121,4 +122,8 @@ public class GuMaxWeightClique<V extends WeightedVertex,
         return max.getMaxWeightClique();
     }
 
+    @Override
+    public Set<V> call() throws Exception {
+        return null;
+    }
 }
