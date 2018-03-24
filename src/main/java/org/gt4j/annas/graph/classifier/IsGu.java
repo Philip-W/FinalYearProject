@@ -7,15 +7,19 @@ import org.gt4j.annas.graph.EdgeInterface;
 
 public class IsGu<V, E extends EdgeInterface<V>> {
     public enum Type {HOLE, K2, FALSE, CLIQUE};
+    private IsBasicGu<V, E> classifyBasic;
+
 
     public boolean classifyLeaf(DecompositionTreeLeaf<V, E> leaf){
-
-
+        if (classifyBasic.classify(leaf.getGraph())){
+            leaf.setBuType(classifyBasic.getLastClassifiedType());
+            return true;
+        }
         return false;
     }
 
-
     public boolean classifyTree(DecompositionTreeNodeInterface<V, E> root){
+        classifyBasic = new IsBasicGu<>();
         if (root == null) { return false; }
         if (root.isLeaf()){ return classifyLeaf((DecompositionTreeLeaf) root); }
 
