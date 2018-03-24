@@ -44,5 +44,4 @@ public class IsGu<V, E extends EdgeInterface<V>> {
         }
         return false;
     }
-
 }
