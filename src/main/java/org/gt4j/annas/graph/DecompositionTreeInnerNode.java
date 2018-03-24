@@ -7,6 +7,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     // Confirmed as a atomic graph
     final boolean isLeaf = false;
 
+    ArrayList<DecompositionTreeInnerNode> nonLeafChildren;
     ArrayList<DecompositionTreeNodeInterface> children;
     ArrayList<DecompositionTreeLeaf> leaves;
 
@@ -19,6 +20,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     public DecompositionTreeInnerNode(){
         children = new ArrayList<>();
         leaves = new ArrayList<>();
+        nonLeafChildren = new ArrayList<>();
     }
 
     public DecompositionTreeInnerNode(GraphInterface<V, E> cutset){
@@ -35,6 +37,14 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     public void addChild(DecompositionTreeNodeInterface node){
         if (!children.contains(node)){
             children.add(node);
+        }
+
+        if (node.isLeaf() && !leaves.contains(node)){
+            leaves.add((DecompositionTreeLeaf) node);
+        }
+
+        else if (!nonLeafChildren.contains(node)){
+            nonLeafChildren.add((DecompositionTreeInnerNode) node);
         }
     }
 
@@ -61,5 +71,9 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
 
     public ArrayList<DecompositionTreeLeaf> getLeaves() {
         return leaves;
+    }
+
+    public ArrayList<DecompositionTreeInnerNode> getNonLeafChildren() {
+        return nonLeafChildren;
     }
 }
