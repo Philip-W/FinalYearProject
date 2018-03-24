@@ -33,8 +33,8 @@ public class IsGu<V, E extends EdgeInterface<V>> {
 
             // In Tarjans algorithm there will always be only 1 non leaf component
             // and 1 leaf except the final inner node which has 2 children.
-            if (temp.getNonLeafChildren().size() == 1) {
-                temp = temp.getNonLeafChildren().get(0);
+            if (temp.getInnerChildren().size() == 1) {
+                temp = temp.getInnerChildren().get(0);
             }
             else {
                 // At this point all leaves have been evaluated and there are

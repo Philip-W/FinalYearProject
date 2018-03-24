@@ -1,13 +1,12 @@
 package org.gt4j.annas.graph;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface{
     // Confirmed as a atomic graph
     final boolean isLeaf = false;
 
-    ArrayList<DecompositionTreeInnerNode> nonLeafChildren;
+    ArrayList<DecompositionTreeInnerNode> innerChildren;
     ArrayList<DecompositionTreeNodeInterface> children;
     ArrayList<DecompositionTreeLeaf> leaves;
 
@@ -20,14 +19,14 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     public DecompositionTreeInnerNode(){
         children = new ArrayList<>();
         leaves = new ArrayList<>();
-        nonLeafChildren = new ArrayList<>();
+        innerChildren = new ArrayList<>();
     }
 
     public DecompositionTreeInnerNode(GraphInterface<V, E> cutset){
         this.cutset = cutset;
         children = new ArrayList<>();
         leaves = new ArrayList<>();
-
+        innerChildren = new ArrayList<>();
     }
 
     public void setCutset(GraphInterface<V, E> cutset){
@@ -35,6 +34,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     }
 
     public void addChild(DecompositionTreeNodeInterface node){
+
         if (!children.contains(node)){
             children.add(node);
         }
@@ -43,8 +43,8 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
             leaves.add((DecompositionTreeLeaf) node);
         }
 
-        else if (!nonLeafChildren.contains(node)){
-            nonLeafChildren.add((DecompositionTreeInnerNode) node);
+        else if (!innerChildren.contains(node)){
+            innerChildren.add((DecompositionTreeInnerNode) node);
         }
     }
 
@@ -73,7 +73,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         return leaves;
     }
 
-    public ArrayList<DecompositionTreeInnerNode> getNonLeafChildren() {
-        return nonLeafChildren;
+    public ArrayList<DecompositionTreeInnerNode> getInnerChildren() {
+        return innerChildren;
     }
 }
