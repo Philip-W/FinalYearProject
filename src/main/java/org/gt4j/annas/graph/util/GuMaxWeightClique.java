@@ -17,14 +17,14 @@ public class GuMaxWeightClique<V extends WeightedVertex,
     public ArrayList<V> maxCliqueInLeaf(DecompositionTreeLeaf<V, E> leaf){
             if (!leaf.getBu()) return null ; // Should throw unClassified graph exception
             if (leaf.getBuType() == IsGu.Type.K2){
-                maxCliqueInK2();
+                maxCliqueInK2(leaf);
             }
 
         return null;
     }
 
     public ArrayList<V> maxCliqueInK2(DecompositionTreeLeaf<V, E> leaf){
-
+        return null;
 
     }
 
@@ -52,6 +52,4 @@ public class GuMaxWeightClique<V extends WeightedVertex,
         return maxClique;
     }
 
-
-    ArrayList<>
 }
