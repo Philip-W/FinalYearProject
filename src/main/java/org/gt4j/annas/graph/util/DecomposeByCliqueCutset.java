@@ -156,7 +156,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     private DecompositionTreeNodeInterface decompose(SimpleUndirectedGraph<V, E> inputGraph, List<V> ordering){
         Set<V> vertices  =  inputGraph.getVertices();
         List<V> bTemp;
-        DecompositionTreeNodeInterface node;
+        DecompositionTreeInnerNode<V, E> node;
 
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
@@ -197,7 +197,8 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                     SimpleUndirectedGraph<V, E> cutsetGraph =
                             InducedSubgraph.inducedSubgraphOf(inputGraph, neighbours);
                     node = new DecompositionTreeInnerNode(cutsetGraph);
-                    node.addLeaf(new DecompositionTreeLeaf(gPrime));
+
+                    node.addLeaf(new DecompositionTreeLeaf(gPrime, cutsetGraph));
                     DecompositionTreeNodeInterface next = decompose(gDoublePrime, updatedOrdering);
                     if (next.isLeaf()){ node.addLeaf( (DecompositionTreeLeaf) next); }
                     else { node.addChild(next); }
@@ -206,7 +207,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
             }
         }
 
-        return new DecompositionTreeLeaf(inputGraph);
+        // The final leaf, since there could only be 1 leaf in the tree no cutset
+        // is passed
+        return new DecompositionTreeLeaf(inputGraph, null);
     }
 
 

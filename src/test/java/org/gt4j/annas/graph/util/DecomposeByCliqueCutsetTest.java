@@ -124,7 +124,7 @@ public class DecomposeByCliqueCutsetTest {
 
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
         decompose.setOrder(order);
-        DecompositionTreeNodeInterface root = decompose.getDecomposition();
+        DecompositionTreeInnerNode root = (DecompositionTreeInnerNode) decompose.getDecomposition();
 
         /* First layer */
         // Check cutset contents
@@ -142,7 +142,7 @@ public class DecomposeByCliqueCutsetTest {
         assertTrue(v.contains("C"));
         assertTrue(v.contains("A"));
 
-        root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+        root = (DecompositionTreeInnerNode) root.getChildren().get(0);
         /* Second layer */
         cutset =  root.getCutset().getVertices();
 
@@ -159,7 +159,7 @@ public class DecomposeByCliqueCutsetTest {
         assertTrue(v.contains("C"));
         assertTrue(v.contains("G"));
 
-        root = (DecompositionTreeNodeInterface) root.getChildren().get(0);
+        root = (DecompositionTreeInnerNode) root.getChildren().get(0);
         /* Third Layer */
 
         cutset =  root.getCutset().getVertices();

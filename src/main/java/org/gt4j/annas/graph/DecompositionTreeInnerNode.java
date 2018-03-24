@@ -5,11 +5,16 @@ import java.util.List;
 
 public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface{
     // Confirmed as a atomic graph
-    public boolean isLeaf = false;
+    final boolean isLeaf = false;
 
-    protected ArrayList<DecompositionTreeNodeInterface> children;
-    protected ArrayList<DecompositionTreeLeaf> leaves;
-    protected GraphInterface<V, E> cutset;
+    ArrayList<DecompositionTreeNodeInterface> children;
+    ArrayList<DecompositionTreeLeaf> leaves;
+
+
+    /* For inner nodes, the cutset is the set that seperates the inner node
+    graph into 2 further subgraphs
+     */
+    GraphInterface<V, E> cutset;
 
     public DecompositionTreeInnerNode(){
         children = new ArrayList<>();
@@ -27,14 +32,12 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         this.cutset = cutset;
     }
 
-    @Override
     public void addChild(DecompositionTreeNodeInterface node){
         if (!children.contains(node)){
             children.add(node);
         }
     }
 
-    @Override
     public void addLeaf(DecompositionTreeLeaf leaf){
         if (!leaves.contains(leaf)){
             leaves.add(leaf);
@@ -42,18 +45,16 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     }
 
     @Override
-    public boolean isLeaf(){return false;}
+    public boolean isLeaf(){return isLeaf;}
 
     public GraphInterface<V, E> getCutset(){
         return cutset;
     }
 
-    @Override
     public ArrayList<DecompositionTreeNodeInterface> getChildren() {
         return children;
     }
 
-    @Override
     public GraphInterface getGraph() {
         return null;
     }

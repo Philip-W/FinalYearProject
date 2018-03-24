@@ -5,9 +5,15 @@ import java.util.ArrayList;
 public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface {
 
 
-    protected GraphInterface<V, E> leafGraph;
+    GraphInterface<V, E> leafGraph;
 
-    public DecompositionTreeLeaf(GraphInterface<V, E> leafGraph){
+    /* For decomp leaves the cutset is the set used to seperate the leaf from
+    the previous inner node
+     */
+    GraphInterface<V, E> cutset;
+
+    public DecompositionTreeLeaf(GraphInterface<V, E> leafGraph, GraphInterface<V, E> cutset){
+        this.cutset = cutset;
         this.leafGraph = leafGraph;
     }
 
@@ -17,14 +23,8 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
     public boolean isLeaf(){return true;}
 
     @Override
-    public void addLeaf(DecompositionTreeLeaf n) { return; }
-
-    @Override
-    public void addChild(DecompositionTreeNodeInterface n) { return; }
-
-    @Override
     public GraphInterface getCutset() {
-        return null;
+        return cutset;
     }
 
     @Override
@@ -32,14 +32,5 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
         return leafGraph;
     }
 
-    @Override
-    public ArrayList<DecompositionTreeLeaf> getLeaves() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<DecompositionTreeNodeInterface> getChildren() {
-        return null;
-    }
 }
 
