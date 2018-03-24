@@ -20,14 +20,14 @@ import java.util.Collection;
 public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E>  {
 
     private DecompositionTreeLeaf<V, E> leaf;
-    private GraphInterface<V, E> leafGraph;
+    private GraphInterface<V, E> graph;
     private SimpleUndirectedGraph<V, E> complement;
     private Collection<Collection<V>> complementComponents;
 
     public IsBasicGu(DecompositionTreeLeaf<V, E> leaf){
         this.leaf = leaf;
-        leafGraph = leaf.getGraph();
-        complement = Utilities.getComplement((SimpleUndirectedGraph<V, E>) leafGraph);
+        graph = leaf.getGraph();
+        complement = Utilities.getComplement((SimpleUndirectedGraph<V, E>) graph);
         complementComponents = Utilities.
                 getConnectedComponents(complement);
     }
@@ -36,14 +36,16 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E
     /** Tests the following condition:
      *      * G has exactly one nontrivial anticomponent, and this anticomponent
      *        is a long hole (Cycle length >=5)
-     * @param graph
      * @return
      */
-    private boolean isLongHoleCondition(SimpleUndirectedGraph<V, E> graph){
+    private boolean isLongHoleCondition(){
         //Every component is trivial bar 1 component, which is a long hole in G
+        int loopCount = 0; // Counts the number of non trivial anticomponenets
         for (Collection<V> comp : complementComponents) {
             if (comp.size() == 1){ continue; } // Is trivial
             else{
+                if (comp.size() < 5){ return false; }
+                loopCount++;
                 for (V vertex : comp){
                     if (graph.getDegree(vertex) != 2){
                         return false;
@@ -51,8 +53,9 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements Classifier<V, E
                 }
             }
         }
-        return true;
+        return loopCount == 1;
     }
+
 
     @Override
     public boolean classify(GraphInterface<V, E> graph) {
