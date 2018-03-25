@@ -44,8 +44,40 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
 
     }
 
-    private void permuteLeafColors() {
+    private DecompositionTreeInnerNode<V, E> permuteLeafColors(
+            DecompositionTreeInnerNode<V, E> node) {
 
+        DecompositionTreeInnerNode<V, E> next;
+        if (node.getLeaves().size() == 2){
+            permuteChildren(node);
+            next = mergeLeaves(node);
+        }
+
+        return node;
+    }
+
+    private void permuteChildren(DecompositionTreeInnerNode<V, E> node) {
+        Set<V> cutset = node.getCutset().getVertices();
+        DecompositionTreeLeaf<V, E> leaf1 = null, leaf2 = null;
+
+        for (V vertex : cutset){
+            int leaf1Color = leaf1.getVertexColor(vertex);
+            int leaf2Color = leaf2.getVertexColor(vertex);
+            if (leaf2Color != leaf1Color){
+                // swap all leaf2color for leaf1color;
+                leaf1.swapColors(leaf1Color, leaf2Color);
+            }
+        }
+
+
+
+    }
+
+    private DecompositionTreeInnerNode<V,E> mergeLeaves(
+            DecompositionTreeInnerNode<V,E> node) {
+
+
+        return node;
     }
 
     public void setOptimalColoring(){
@@ -53,7 +85,10 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
         // recursively permute the coloring from the bottom up.
 
         colorLeaves();
-        permuteLeafColors();
+        if ( root.isLeaf()){ return; }
+
+        permuteLeafColors((DecompositionTreeInnerNode<V, E>) root);
+
     }
 
 

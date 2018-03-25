@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface {
+public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface<V, E> {
 
 
     GraphInterface<V, E> leafGraph;
@@ -38,10 +38,10 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
     }
 
 
-
     /*******************************************************/
     /* G_u specific information */
     /*******************************************************/
+
     // Default b_u to false as it is unclassified
     private boolean isBu = false;
     private IsGu.Type BuType;
@@ -92,14 +92,24 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
          return antiComponents;
     }
 
+
+    @Override
     public void setVertexColor(V vertex, int color){
         colorToVertices.put(color, vertex);
         vertexToColor.put(vertex, color);
     }
 
+    @Override
     public int getVertexColor(V vertex){
         return vertexToColor.getOrDefault(vertex, -1);
     }
+
+
+    @Override
+    public void swapColors(int to, int from) {
+        // permute one color number to the next;
+    }
+
 
 }
 

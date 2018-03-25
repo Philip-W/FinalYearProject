@@ -69,6 +69,21 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         return null;
     }
 
+    @Override
+    public void setVertexColor(Object vertex, int color) {
+
+    }
+
+    @Override
+    public int getVertexColor(Object vertex) {
+        return 0;
+    }
+
+    @Override
+    public void swapColors(int to, int from) {
+
+    }
+
     public ArrayList<DecompositionTreeLeaf> getLeaves() {
         return leaves;
     }
