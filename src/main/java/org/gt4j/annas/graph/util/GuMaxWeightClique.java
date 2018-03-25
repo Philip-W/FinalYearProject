@@ -12,7 +12,7 @@ public class GuMaxWeightClique<V extends WeightedVertex,
 
     /**
      * Sets the max weight clique of the given leaf (storing it in the leaf)
-     * and returns the sum of the weighted clique
+     * and returns the vertices of the weighted clique
      * @param leaf
      * @return
      */
