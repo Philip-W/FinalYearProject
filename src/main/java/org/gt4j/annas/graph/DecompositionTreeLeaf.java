@@ -97,5 +97,9 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
         vertexToColor.put(vertex, color);
     }
 
+    public int getVertexColor(V vertex){
+        return vertexToColor.getOrDefault(vertex, -1);
+    }
+
 }
 

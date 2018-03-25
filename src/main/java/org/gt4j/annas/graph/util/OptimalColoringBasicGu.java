@@ -2,18 +2,78 @@ package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.DecompositionTreeLeaf;
 import org.gt4j.annas.graph.EdgeInterface;
+import org.gt4j.annas.graph.classifier.IsGu;
 
 import java.util.Collection;
 
 public class OptimalColoringBasicGu<V,  E extends EdgeInterface<V>> {
 
-    public OptimalColoringBasicGu(DecompositionTreeLeaf<V, E> leaf){
 
+    private int colorLongHole(DecompositionTreeLeaf<V, E> leaf){
+        int color = 1;
+        for (Collection<V> component : leaf.getAntiComponents()){
+            // Vertex is complete to every other vertex, should be unique color
+            if (component.size() == 1){
+                leaf.setVertexColor((V) component.toArray()[0], color);
+                color++;
+            }
+            // Else is a long hole
+            else {
+                V vertex = (V) component.toArray()[0];
+                leaf.setVertexColor(vertex, color);
+                leaf.getLeafGraph().getEdges(vertex);
+                V adj1, adj2; // 2 adjacent neighbours
+                vertex = (V) leaf.getLeafGraph().getEdges(vertex).toArray()[0];
+
+                while (true){
+                    // This should only return 2 edges! requires testing.
+                    adj1 = (V) leaf.getLeafGraph().getEdges(vertex).toArray()[0];
+                    adj2 = (V) leaf.getLeafGraph().getEdges(vertex).toArray()[1];
+                    int leftColor = leaf.getVertexColor(adj1);
+                    int rightColor = leaf.getVertexColor(adj2);
+
+                    // One unColored vertex
+                    if (leftColor == -1 || rightColor == -1){
+                        V nextVertex = leftColor == -1 ? adj1 : adj2;
+                        V previousV  = rightColor == -1 ? adj1 : adj2;
+
+                        int previousCol = leaf.getVertexColor(previousV);
+                        if (previousCol == color){
+                            leaf.setVertexColor(vertex, color+1);
+                        }
+                        else { leaf.setVertexColor(vertex, color); }
+                        vertex = nextVertex;
+                        continue;
+                    }
+
+                    // Reached end and parity is even
+                    else if (leftColor == rightColor){
+                        if (leftColor == color){
+                            leaf.setVertexColor(vertex, color + 1);
+                        }
+                        else {
+                            leaf.setVertexColor(vertex, color);
+                        }
+                        break;
+                    }
+
+                    // reached the end of the circle and the parity is odd
+                    else {
+                        leaf.setVertexColor(vertex, color + 2);
+                        break;
+                    }
+                }
+                // find parity of long hole, if even 2 colors used, 3 if odd.
+                int colorsused = component.size() % 2;
+                color += colorsused == 1 ? 3 : 2;
+            }
+        }
+        return color;
     }
 
-    private void colorLongHole(DecompositionTreeLeaf<V, E> leaf){
-        int color = 1;
 
+    private int colorK2(DecompositionTreeLeaf<V, E> leaf){
+        int color = 1;
         for (Collection<V> component : leaf.getAntiComponents()){
             if (component.size() == 1){
                 leaf.setVertexColor((V) component.toArray()[0], color);
@@ -25,11 +85,7 @@ public class OptimalColoringBasicGu<V,  E extends EdgeInterface<V>> {
                 color++;
             }
         }
-    }
-
-
-    private void colorK2(DecompositionTreeLeaf<V, E> leaf){
-
+        return color;
     }
 
     /**
@@ -40,8 +96,14 @@ public class OptimalColoringBasicGu<V,  E extends EdgeInterface<V>> {
      * @return
      */
     public int computeColoring(DecompositionTreeLeaf<V, E> leaf){
-
-
-        return -1;
+        if ( !leaf.getBu()) { return -1; } // Throw wrong class error
+        else {
+            if (leaf.getBuType() == IsGu.Type.K2){
+                return colorK2(leaf);
+            }
+            else {
+                return colorLongHole(leaf);
+            }
+        }
     }
 }
