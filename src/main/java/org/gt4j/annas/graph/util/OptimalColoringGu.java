@@ -100,6 +100,16 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
      */
     private void mergeChildren(
             DecompositionTreeInnerNode<V,E> node) {
+        DecompositionTreeNodeInterface<V, E> child1, child2;
+        child1 = node.getChildren().get(0);
+        child2 = node.getChildren().get(1);
+
+        for (V v : child1.getGraph().getVertices()){
+            node.setVertexColor(v, child1.getVertexColor(v));
+        }
+        for (V v : child2.getGraph().getVertices()){
+            node.setVertexColor(v, child2.getVertexColor(v));
+        }
     }
 
     public void setOptimalColoring(){
