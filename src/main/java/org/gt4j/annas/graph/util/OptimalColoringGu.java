@@ -76,7 +76,6 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
         Set<V> cutset = node.getCutset().getVertices();
         DecompositionTreeNodeInterface<V, E> child1 = null, child2 = null;
 
-
         child1 = node.getChildren().get(0);
         child2 = node.getChildren().get(1);
 
@@ -126,6 +125,7 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
 
     @Override
     public Set<Set<V>> call() throws Exception {
+        setOptimalColoring();
         return null;
     }
 }
