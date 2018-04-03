@@ -44,18 +44,23 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
 
     }
 
-    private DecompositionTreeInnerNode<V, E> permuteLeafColors(
+    private void colorDecompositionTree(
             DecompositionTreeInnerNode<V, E> node) {
 
-        DecompositionTreeInnerNode<V, E> next;
+        //DecompositionTreeInnerNode<V, E> next;
         if (node.getLeaves().size() == 2){
             permuteChildren(node);
-            next = mergeLeaves(node);
+            mergeChildren(node);
+            return;
         }
-
-        return node;
+        colorDecompositionTree(node.getInnerChildren().get(0));
     }
 
+    /**
+     * Takes an inner node and swaps the coloring of it's children so that
+     * both children agree on on a coloring of the cutset
+     * @param node
+     */
     private void permuteChildren(DecompositionTreeInnerNode<V, E> node) {
         Set<V> cutset = node.getCutset().getVertices();
         DecompositionTreeLeaf<V, E> leaf1 = null, leaf2 = null;
@@ -73,11 +78,16 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
 
     }
 
-    private DecompositionTreeInnerNode<V,E> mergeLeaves(
+    /**
+     * Sets the coloring of an inner node based on the coloring of it's children,
+     * For this to work, both children must agree on a coloring permutation of
+     * the cutset they both share.
+     *
+     * @param node
+     * @return
+     */
+    private void mergeChildren(
             DecompositionTreeInnerNode<V,E> node) {
-
-
-        return node;
     }
 
     public void setOptimalColoring(){
@@ -87,7 +97,7 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
         colorLeaves();
         if ( root.isLeaf()){ return; }
 
-        permuteLeafColors((DecompositionTreeInnerNode<V, E>) root);
+        colorDecompositionTree((DecompositionTreeInnerNode<V, E>) root);
 
     }
 

@@ -19,7 +19,7 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
         complement = Utilities.getComplement(
                 (SimpleUndirectedGraph<V, E>) leafGraph);
 
-        antiComponents = Utilities.getConnectedComponents( complement);
+        antiComponents = Utilities.getConnectedComponents(complement);
     }
 
 

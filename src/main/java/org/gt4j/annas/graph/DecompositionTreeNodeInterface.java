@@ -13,7 +13,7 @@ public interface DecompositionTreeNodeInterface <V, E extends EdgeInterface<V>>{
 
     void setVertexColor(V vertex, int color);
 
-     int getVertexColor(V vertex);
+    int getVertexColor(V vertex);
 
     void swapColors(int to, int from);
 
