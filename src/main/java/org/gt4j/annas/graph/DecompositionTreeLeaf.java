@@ -109,14 +109,26 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
     }
 
 
+    /**
+     * Swaps two colors in both hash tables, used for permuting cutsets.
+     * @param to
+     * @param from
+     */
     @Override
     public void swapColors(int to, int from) {
+        // Handle colorToVertices
         Collection<V> setFrom = colorToVertices.getCollection(from);
         Collection<V> setTo   = colorToVertices.getCollection(to);
+
+        colorToVertices.remove(to);
+        colorToVertices.remove(from);
 
         colorToVertices.putAll(to ,setFrom);
         colorToVertices.putAll(from, setTo);
 
+        for (V v : setFrom){ vertexToColor.put(v, to); }
+
+        for (V v : setTo){ vertexToColor.put(v, from); }
     }
 
 
