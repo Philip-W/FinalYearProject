@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.After;
@@ -269,5 +270,30 @@ public class TestMultiHashMap {
 		assertTrue(this.map.values().contains(four));
 		assertTrue(this.map.values().contains(five));
 		assertTrue(this.map.values().contains("1+0"));
+	}
+
+	@Test
+	public void testSwapCollections() {
+		this.map.put(1, "A");
+		this.map.put(1, "B");
+		this.map.put(2, "C");
+		this.map.put(2, "D");
+
+
+		Collection<String> vals1 = this.map.getCollection(1);
+		Collection<String> vals2 = this.map.getCollection(2);
+		this.map.remove(1);
+		this.map.remove(2);
+		assertTrue(vals1.size() == 2);
+
+		this.map.putAll(2, vals1);
+		this.map.putAll(1, vals2);
+
+		assertTrue(this.map.getCollection(1).contains("C"));
+		assertTrue(this.map.getCollection(1).contains("D"));
+
+		assertTrue(this.map.getCollection(2).contains("A"));
+		assertTrue(this.map.getCollection(2).contains("B"));
+
 	}
 }

@@ -6,6 +6,7 @@ import org.gt4j.annas.graph.util.Utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface<V, E> {
 
@@ -20,6 +21,9 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
                 (SimpleUndirectedGraph<V, E>) leafGraph);
 
         antiComponents = Utilities.getConnectedComponents(complement);
+
+        vertexToColor = new HashMap<>();
+        colorToVertices = new MultiHashMap<>();
     }
 
 
@@ -107,7 +111,12 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
 
     @Override
     public void swapColors(int to, int from) {
-        // permute one color number to the next;
+        Collection<V> setFrom = colorToVertices.getCollection(from);
+        Collection<V> setTo   = colorToVertices.getCollection(to);
+
+        colorToVertices.putAll(to ,setFrom);
+        colorToVertices.putAll(from, setTo);
+
     }
 
 

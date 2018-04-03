@@ -20,12 +20,17 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
         colorBasic = new OptimalColoringBasicGu<>();
     }
 
-
+    /**
+     * Handles the base case for a decomosition tree.
+     * Collects all leaves into a set and colors each leaf independently
+     *
+     */
     private void colorLeaves(){
         if (root.isLeaf()){
             colorBasic.computeColoring((DecompositionTreeLeaf<V, E>) root);
             return;
         }
+
         DecompositionTreeInnerNode<V, E> temp =
                 (DecompositionTreeInnerNode<V, E>) root;
 
@@ -41,19 +46,25 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
         for (DecompositionTreeLeaf leaf : leaves){
             colorBasic.computeColoring(leaf);
         }
-
     }
 
+    /**
+     * Recursively permutes the children of an inner node and merges the colors
+     * from children into the current inner node
+     *
+     * @param node
+     */
     private void colorDecompositionTree(
             DecompositionTreeInnerNode<V, E> node) {
 
-        //DecompositionTreeInnerNode<V, E> next;
         if (node.getLeaves().size() == 2){
             permuteChildren(node);
             mergeChildren(node);
             return;
         }
         colorDecompositionTree(node.getInnerChildren().get(0));
+        permuteChildren(node);
+        mergeChildren(node);
     }
 
     /**
@@ -63,19 +74,20 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
      */
     private void permuteChildren(DecompositionTreeInnerNode<V, E> node) {
         Set<V> cutset = node.getCutset().getVertices();
-        DecompositionTreeLeaf<V, E> leaf1 = null, leaf2 = null;
+        DecompositionTreeNodeInterface<V, E> child1 = null, child2 = null;
+
+
+        child1 = node.getChildren().get(0);
+        child2 = node.getChildren().get(1);
 
         for (V vertex : cutset){
-            int leaf1Color = leaf1.getVertexColor(vertex);
-            int leaf2Color = leaf2.getVertexColor(vertex);
+            int leaf1Color = child1.getVertexColor(vertex);
+            int leaf2Color = child2.getVertexColor(vertex);
             if (leaf2Color != leaf1Color){
                 // swap all leaf2color for leaf1color;
-                leaf1.swapColors(leaf1Color, leaf2Color);
+                child1.swapColors(leaf1Color, leaf2Color);
             }
         }
-
-
-
     }
 
     /**
