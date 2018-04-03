@@ -1,14 +1,22 @@
 package org.gt4j.annas.graph;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
-public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface{
+public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implements DecompositionTreeNodeInterface<V, E>{
     // Confirmed as a atomic graph
     final boolean isLeaf = false;
 
-    ArrayList<DecompositionTreeInnerNode> innerChildren;
-    ArrayList<DecompositionTreeNodeInterface> children;
-    ArrayList<DecompositionTreeLeaf> leaves;
+    ArrayList<DecompositionTreeInnerNode<V, E>> innerChildren;
+    ArrayList<DecompositionTreeNodeInterface<V, E>> children;
+    ArrayList<DecompositionTreeLeaf<V, E>> leaves;
+
+    // maps each vertex to a color
+    private HashMap<V, Integer> vertexToColor;
+
+    // maps each color to a list of vertices with that color
+    private MultiHashMap<Integer, V> colorToVertices;
 
 
     /* For inner nodes, the cutset is the set that seperates the inner node
@@ -20,6 +28,8 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         children = new ArrayList<>();
         leaves = new ArrayList<>();
         innerChildren = new ArrayList<>();
+        vertexToColor = new HashMap<>();
+        colorToVertices = new MultiHashMap<>();
     }
 
     public DecompositionTreeInnerNode(GraphInterface<V, E> cutset){
@@ -61,7 +71,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         return cutset;
     }
 
-    public ArrayList<DecompositionTreeNodeInterface> getChildren() {
+    public ArrayList<DecompositionTreeNodeInterface<V, E>> getChildren() {
         return children;
     }
 
@@ -69,11 +79,46 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         return null;
     }
 
-    public ArrayList<DecompositionTreeLeaf> getLeaves() {
+    @Override
+    public void setVertexColor(V vertex, int color){
+        colorToVertices.put(color, vertex);
+        vertexToColor.put(vertex, color);
+    }
+
+    @Override
+    public int getVertexColor(V vertex){
+        return vertexToColor.getOrDefault(vertex, -1);
+    }
+
+
+    public ArrayList<DecompositionTreeLeaf<V, E>> getLeaves() {
         return leaves;
     }
 
-    public ArrayList<DecompositionTreeInnerNode> getInnerChildren() {
+    public ArrayList<DecompositionTreeInnerNode<V, E>> getInnerChildren() {
         return innerChildren;
+    }
+
+
+    /**
+     * Swaps two colors in both hash tables, used for permuting cutsets.
+     * @param to
+     * @param from
+     */
+    @Override
+    public void swapColors(int to, int from) {
+        // Handle colorToVertices
+        Collection<V> setFrom = colorToVertices.getCollection(from);
+        Collection<V> setTo   = colorToVertices.getCollection(to);
+
+        colorToVertices.remove(to);
+        colorToVertices.remove(from);
+
+        colorToVertices.putAll(to ,setFrom);
+        colorToVertices.putAll(from, setTo);
+
+        for (V v : setFrom){ vertexToColor.put(v, to); }
+
+        for (V v : setTo){ vertexToColor.put(v, from); }
     }
 }
