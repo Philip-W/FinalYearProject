@@ -20,8 +20,6 @@ public class IsBasicGuTest {
     String h = "h";
     String i = "i";
 
-
-
     @Test
     public void classifyTestClique() throws Exception {
         g1 = new SimpleUndirectedGraph<>(DefaultEdge.class);

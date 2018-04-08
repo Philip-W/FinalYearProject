@@ -6,7 +6,7 @@ import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
 import org.gt4j.annas.graph.EdgeInterface;
 
 public class IsGu<V, E extends EdgeInterface<V>> {
-    public enum Type {HOLE, K2, FALSE, CLIQUE};
+    public enum Type {HOLE, K2, FALSE, CLIQUE}
     private IsBasicGu<V, E> classifyBasic;
 
 
