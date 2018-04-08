@@ -147,11 +147,16 @@ public class IsBasicGuTest {
         g1.addEdge(i, b);
         g1.addEdge(i, c);
 
-
         IsBasicGu<String, DefaultEdge> classifier =
                 new IsBasicGu<>();
 
         assertTrue(classifier.classify(g1));
+
+
+        // make the graph chordal
+        g1.addEdge(i, f);
+        assertTrue(!classifier.classify(g1));
+
     }
 
 }
