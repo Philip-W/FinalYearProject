@@ -23,6 +23,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
     graph into 2 further subgraphs
      */
     GraphInterface<V, E> cutset;
+    GraphInterface<V, E> graph;
 
     public DecompositionTreeInnerNode(){
         children = new ArrayList<>();
@@ -34,9 +35,13 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
 
     public DecompositionTreeInnerNode(GraphInterface<V, E> cutset){
         this.cutset = cutset;
+
         children = new ArrayList<>();
         leaves = new ArrayList<>();
         innerChildren = new ArrayList<>();
+
+        vertexToColor = new HashMap<>();
+        colorToVertices = new MultiHashMap<>();
     }
 
     public void setCutset(GraphInterface<V, E> cutset){
@@ -75,8 +80,12 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         return children;
     }
 
-    public GraphInterface getGraph() {
-        return null;
+    public GraphInterface<V, E> getGraph() {
+        return graph;
+    }
+
+    public void setGraph(GraphInterface<V, E> graph){
+        this.graph = graph;
     }
 
     @Override
