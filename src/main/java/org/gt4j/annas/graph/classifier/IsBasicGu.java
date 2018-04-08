@@ -40,13 +40,15 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements
     private boolean isLongHoleCondition(){
         //Every component is trivial bar 1 component, which is a long hole in G
         int loopCount = 0; // Counts the number of non trivial anticomponenets
+        int numberOfAntiComponents = complementComponents.size();
+        int trivial = numberOfAntiComponents - 1;
         for (Collection<V> comp : complementComponents) {
             if (comp.size() == 1){ continue; } // Is trivial
             else{
                 if (comp.size() < 5){ return false; }
                 loopCount++;
                 for (V vertex : comp){
-                    if (graph.getDegree(vertex) != 2){
+                    if (graph.getDegree(vertex)- trivial != 2){
                         return false;
                     }
                 }
@@ -91,6 +93,7 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements
             return true;
         }
         else {
+
             lastClassifiedType = IsGu.Type.FALSE;
             return false;
         }
