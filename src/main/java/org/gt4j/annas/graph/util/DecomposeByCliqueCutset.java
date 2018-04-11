@@ -50,8 +50,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      * @return List
      *          Contains a LexBFS ordering
      */
-    private List<V> getMinimalOrdering(){
-        LexBFS<V> lexBFS = new LexBFS<>(graph);
+    private List<V> getMinimalOrdering(SimpleUndirectedGraph<V, E> inputGraph){
+        LexBFS<V> lexBFS = new LexBFS<>(inputGraph);
+        /**
         List<String> list = new ArrayList<>();
         list.add("l");
         list.add("j");
@@ -65,7 +66,8 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         list.add("f");
 
         return (List<V>) list;
-        //return lexBFS.getOrder();
+         */
+        return lexBFS.getOrder();
     }
 
     /**
@@ -125,6 +127,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *
      */
     private void populateCv(SimpleUndirectedGraph<V, E> g){
+        cvMap.clear();
         for (V vertex : g.getVertices()){
             for (E edge : g.getEdges(vertex)){
                 if (orderingMap.get(edge.getOtherEndpoint(vertex)) >
@@ -142,7 +145,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      */
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
-        if (minimalOrder == null){ minimalOrder = getMinimalOrdering(); }
+        if (minimalOrder == null){ minimalOrder = getMinimalOrdering(graph); }
         //System.out.println(minimalOrder.toString());
 
         // Generate fill in graph
@@ -216,6 +219,15 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                     node = new DecompositionTreeInnerNode(cutsetGraph);
 
                     node.addLeaf(new DecompositionTreeLeaf(gPrime, cutsetGraph));
+
+                    minimalOrder = getMinimalOrdering(gDoublePrime);
+
+                    // Generate fill in graph
+                    SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
+
+                    // Compute the sets C(v) for each vertex
+                    populateCv(fillInGraph);
+
                     DecompositionTreeNodeInterface next = decompose(gDoublePrime, updatedOrdering);
                     if (next.isLeaf()){ node.addLeaf( (DecompositionTreeLeaf) next); }
                     else { node.addChild(next); }
