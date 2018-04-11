@@ -220,13 +220,13 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
                     node.addLeaf(new DecompositionTreeLeaf(gPrime, cutsetGraph));
 
-                   // minimalOrder = getMinimalOrdering(gDoublePrime);
+                    minimalOrder = getMinimalOrdering(gDoublePrime);
 
                     // Generate fill in graph
-                   // SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
+                    SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
 
                     // Compute the sets C(v) for each vertex
-                    //populateCv(fillInGraph);
+                    populateCv(fillInGraph);
 
                     DecompositionTreeNodeInterface next = decompose(gDoublePrime, updatedOrdering);
                     if (next.isLeaf()){ node.addLeaf( (DecompositionTreeLeaf) next); }

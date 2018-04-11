@@ -107,7 +107,7 @@ public class DecomposeByCliqueCutsetTest {
 
         testGraph1.addEdge(i, k);
         testGraph1.addEdge(i, j);
-        //testGraph1.addEdge(k, f);
+        testGraph1.addEdge(k, f);
 
         List<String> order = new ArrayList<>();
         order.add(a);
@@ -125,6 +125,32 @@ public class DecomposeByCliqueCutsetTest {
         decompose = new DecomposeByCliqueCutset<>(testGraph1);
         decompose.setOrder(order);
         DecompositionTreeInnerNode root = (DecompositionTreeInnerNode) decompose.getDecomposition();
+
+
+
+        while(root.getLeaves().size() != 2){
+            DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root.getLeaves().get(0);
+            System.out.println("Leaf Cutset:");
+            System.out.println(leaf.getCutset().getVertices());
+            System.out.print("Leaf vertices");
+            System.out.println(leaf.getGraph().getVertices());
+            root = (DecompositionTreeInnerNode) root.getInnerChildren().get(0);
+        }
+        DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root.getLeaves().get(0);
+
+        System.out.println("Leaf Cutset:");
+        System.out.println(leaf.getCutset().getVertices());
+        System.out.print("Leaf vertices");
+        System.out.println(leaf.getGraph().getVertices());
+
+        leaf = (DecompositionTreeLeaf) root.getLeaves().get(1);
+
+        System.out.println("Leaf Cutset:");
+
+        System.out.print("Leaf vertices");
+        System.out.println(leaf.getGraph().getVertices());
+
+
 
         /* First layer */
         // Check cutset contents
@@ -244,6 +270,7 @@ public class DecomposeByCliqueCutsetTest {
         assertTrue(fillIn.containsEdge(d, g));
         assertTrue(fillIn.containsEdge(e, g));
 
+
     }
 
     @Test
@@ -269,6 +296,7 @@ public class DecomposeByCliqueCutsetTest {
                 decompose.getFillInSet(Collections.unmodifiableList(order));
 
         assertTrue(fillIn.containsEdge(a, c));
+
     }
 
 
