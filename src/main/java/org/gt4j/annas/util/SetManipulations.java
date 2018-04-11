@@ -28,15 +28,15 @@ public class SetManipulations {
     public static <V> List<V> removeAll(Collection<V> mainList,
                                         Collection<V> setToRemove){
 
-        Set<V> set = new HashSet<V>();
-
+        //Set<V> set = new HashSet<V>();
+        List<V> set = new ArrayList<>();
         for (V v : mainList){
             if (!setToRemove.contains(v)){
                 set.add(v);
             }
         }
 
-        return new ArrayList<V>(set);
+        return  set;
     }
 
     public static <V> List<V> intersection(Collection<V> list1, Collection<V> list2){

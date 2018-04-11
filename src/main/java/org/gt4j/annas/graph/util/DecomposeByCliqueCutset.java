@@ -72,9 +72,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         for (V vertex : ordering){
             // Set to highest ordered vertex, later modified to find the lowest
             // monotonely adjacent vertex.
-            V minVertex = ordering.get(ordering.size() -1 );
+            V minVertex = null;
             Set<E> edges =  fillInGraph.getEdges(vertex);
-
+            //System.out.println(vertex + " : " + edges.toString());
             // find the vertex m(v) = u with the minimum ordering such that an edge
             // v -> u exists
             for (E edge : edges){
@@ -90,7 +90,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                     }
                 }
             }
-
+           // System.out.println(vertex + " : " + minVertex);
             // Add edges from all neighbours of vertex to the minVertex
             for (E edge : edges){
                 // The algorithm only connects vertices of higher ordering
@@ -130,10 +130,11 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(); }
+        //System.out.println(minimalOrder.toString());
 
         // Generate fill in graph
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
-
+        //System.out.println(fillInGraph.getEdges().toString());
         // Compute the sets C(v) for each vertex
         populateCv(fillInGraph);
 
@@ -158,7 +159,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         List<V> bTemp;
         DecompositionTreeInnerNode<V, E> node;
 
+        //for (int i = orderingnNum; i < inputGraph.getVertices().size(); i++){
         for (V currentVertex: ordering){
+            System.out.println(currentVertex);
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
             if (neighbours == null){continue;}
@@ -183,7 +186,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
-
+                    System.out.println("decompose on: " + currentVertex);
                     List<V> gPrimeSet = SetManipulations.union(setA, neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);
