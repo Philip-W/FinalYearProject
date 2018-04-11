@@ -17,7 +17,7 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
 
     // maps each color to a list of vertices with that color
     private MultiHashMap<Integer, V> colorToVertices;
-
+    private SimpleUndirectedGraph<V, E> graph;
 
     /* For inner nodes, the cutset is the set that seperates the inner node
     graph into 2 further subgraphs
@@ -120,5 +120,10 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         for (V v : setFrom){ vertexToColor.put(v, to); }
 
         for (V v : setTo){ vertexToColor.put(v, from); }
+    }
+
+
+    public void setGraph(SimpleUndirectedGraph g){
+        graph = g;
     }
 }
