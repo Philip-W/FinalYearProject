@@ -67,6 +67,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
         return (List<V>) list;
          */
+        List<V> l = lexBFS.getOrder();
+        System.out.println("order:");
+        System.out.println(l.toString());
         return lexBFS.getOrder();
     }
 
@@ -97,7 +100,6 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                         orderingMap.get(vertex)){ continue; }
                 if (minVertex == null){
                     minVertex = edge.getOtherEndpoint(vertex);
-                    continue;
                 }
                 else {
                     if (orderingMap.get(minVertex) > orderingMap.get(edge.getOtherEndpoint(vertex))) {
@@ -176,9 +178,8 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         List<V> bTemp;
         DecompositionTreeInnerNode<V, E> node;
         //System.out.println(inputGraph.getVertices());
-        //for (int i = orderingnNum; i < inputGraph.getVertices().size(); i++){
-        for (V currentVertex: ordering){
 
+        for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
             if (neighbours == null){continue;}
