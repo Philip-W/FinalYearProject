@@ -261,7 +261,7 @@ public class IsGuTest {
 
         DecompositionTreeNodeInterface root =
                 decomp.getDecomposition();
-
+/**
         //System.out.println(root.getCutset().getVertices());
         DecompositionTreeInnerNode rootNode = (DecompositionTreeInnerNode)root;
         DecompositionTreeLeaf leaf1 = (DecompositionTreeLeaf) ((DecompositionTreeInnerNode) root)
@@ -281,7 +281,7 @@ public class IsGuTest {
                 .getLeaves().get(1);
 
         //System.out.println(leaf1.getGraph().getVertices());
-
+*/
         IsGu<String, DefaultEdge> classify = new IsGu<>();
         assertTrue(classify.classifyTree(root));
     }
@@ -424,8 +424,8 @@ public class IsGuTest {
         System.out.print("Leaf vertices");
         System.out.println(leaf.getGraph().getVertices());
 
-        //IsGu<String, DefaultEdge> classify = new IsGu<>();
-        //assertTrue(classify.classifyTree(root));
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(root));
 
     }
 
@@ -489,6 +489,7 @@ public class IsGuTest {
         g1.addEdge(k, a);
         g1.addEdge(k, b);
         g1.addEdge(k, c);
+
         g1.addEdge(l, a);
         g1.addEdge(l, b);
         g1.addEdge(l, c);
@@ -501,18 +502,48 @@ public class IsGuTest {
         g1.addEdge(n, b);
         g1.addEdge(n, c);
 
+        g1.addEdge(g, j);
+
         DecomposeByCliqueCutset<String, DefaultEdge> decomp =
                 new DecomposeByCliqueCutset<>(g1);
 
-        DecompositionTreeNodeInterface root =
-                decomp.getDecomposition();
+        DecompositionTreeInnerNode root =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+/*
+        DecompositionTreeInnerNode rootNode = (DecompositionTreeInnerNode) root;
+        //DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root;
 
-        //DecompositionTreeInnerNode rootNode = (DecompositionTreeInnerNode) root;
-        DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root;
+        DecompositionTreeLeaf  leaf1 = (DecompositionTreeLeaf) rootNode.getLeaves().get(0);
+        System.out.println(leaf1.getGraph().getVertices());
+        //System.out.println(leaf.getBuType());
 
-        System.out.println(root.isLeaf());
+        */
+
+        while(root.getLeaves().size() != 2){
+            DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root.getLeaves().get(0);
+            System.out.println("Leaf Cutset:");
+            System.out.println(leaf.getCutset().getVertices());
+            System.out.print("Leaf vertices");
+            System.out.println(leaf.getGraph().getVertices());
+            root = (DecompositionTreeInnerNode) root.getInnerChildren().get(0);
+        }
+        DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root.getLeaves().get(0);
+
+        System.out.println("Leaf Cutset:");
+        System.out.println(leaf.getCutset().getVertices());
+        System.out.print("Leaf vertices");
+        System.out.println(leaf.getGraph().getVertices());
+
+
+        leaf = (DecompositionTreeLeaf) root.getLeaves().get(1);
+
+        //System.out.println("Leaf Cutset:");
+        //System.out.println(leaf.getCutset().getVertices());
+        System.out.print("Leaf vertices");
+        System.out.println(leaf.getGraph().getVertices());
+
+
         IsGu<String, DefaultEdge> classify = new IsGu<>();
         assertTrue(classify.classifyTree(root));
-        System.out.println(leaf.getBuType());
     }
 }

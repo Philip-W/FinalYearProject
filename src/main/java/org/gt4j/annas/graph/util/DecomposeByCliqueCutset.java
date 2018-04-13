@@ -70,7 +70,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         List<V> l = lexBFS.getOrder();
         System.out.println("order:");
         System.out.println(l.toString());
-        return lexBFS.getOrder();
+        return new ArrayList<>(lexBFS.getOrder());
     }
 
     /**
@@ -149,11 +149,12 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         //Get Ordering
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(graph); }
         //System.out.println(minimalOrder.toString());
-
+        Collections.reverse(minimalOrder);
         // Generate fill in graph
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
         //System.out.println(fillInGraph.getEdges().toString());
         // Compute the sets C(v) for each vertex
+        //System.out.println(fillInGraph.getEdges());
         populateCv(fillInGraph);
 
         // Run the decomposition steps, returning the tree root.
@@ -221,13 +222,13 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
                     node.addLeaf(new DecompositionTreeLeaf(gPrime, cutsetGraph));
 
-                    minimalOrder = getMinimalOrdering(gDoublePrime);
+                    //minimalOrder = getMinimalOrdering(gDoublePrime);
 
                     // Generate fill in graph
-                    SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
+                    //SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
 
                     // Compute the sets C(v) for each vertex
-                    populateCv(fillInGraph);
+                    //populateCv(fillInGraph);
 
                     DecompositionTreeNodeInterface next = decompose(gDoublePrime, updatedOrdering);
                     if (next.isLeaf()){ node.addLeaf( (DecompositionTreeLeaf) next); }
@@ -247,4 +248,5 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         treeRoot = runDecomposition();
         return treeRoot;
     }
+
 }
