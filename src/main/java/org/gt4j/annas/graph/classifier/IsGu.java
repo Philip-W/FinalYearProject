@@ -11,6 +11,7 @@ public class IsGu<V, E extends EdgeInterface<V>> {
 
 
     public boolean classifyLeaf(DecompositionTreeLeaf<V, E> leaf){
+        classifyBasic = new IsBasicGu<>();
         if (classifyBasic.classify(leaf.getGraph())){
             leaf.setBu(true);
             leaf.setBuType(classifyBasic.getLastClassifiedType());
