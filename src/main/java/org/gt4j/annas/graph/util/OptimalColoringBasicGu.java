@@ -95,7 +95,7 @@ public class OptimalColoringBasicGu<V,  E extends EdgeInterface<V>> {
                 color++;
             }
         }
-        return color;
+        return --color;
     }
 
     /**
