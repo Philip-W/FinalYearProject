@@ -1,9 +1,6 @@
 package org.gt4j.annas.graph.classifier;
 
-import org.gt4j.annas.graph.DecompositionTreeLeaf;
-import org.gt4j.annas.graph.EdgeInterface;
-import org.gt4j.annas.graph.GraphInterface;
-import org.gt4j.annas.graph.SimpleUndirectedGraph;
+import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.Utilities;
 
 import java.util.Collection;
@@ -80,7 +77,7 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements
     @Override
     public boolean classify(GraphInterface<V, E> graph) {
         this.graph = graph;
-        complement = Utilities.getComplement((SimpleUndirectedGraph<V, E>) graph);
+        complement = (SimpleUndirectedGraph<V, E>) Utilities.getComplement((SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge>) graph);
         complementComponents = Utilities.
                 getConnectedComponents(complement);
 

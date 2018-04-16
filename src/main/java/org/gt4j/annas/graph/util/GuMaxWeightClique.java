@@ -48,9 +48,10 @@ public class GuMaxWeightClique<V extends WeightedVertex,
                 V highPairOne = null;
                 V highPairTwo = null;
                 for (V v : components) {
-                    E[] edges = (E[]) leaf.getLeafGraph().getEdges(v).toArray();
-                    V first = edges[0].getOtherEndpoint(v);
-                    V second = edges[1].getOtherEndpoint(v);
+                    Set<E> edgeSet =  leaf.getLeafGraph().getEdges(v);
+                    ArrayList<E> edges = new ArrayList<>(edgeSet);
+                    V first = edges.get(0).getOtherEndpoint(v);
+                    V second = edges.get(0).getOtherEndpoint(v);
                     V highest = first.getWeight() > second.getWeight() ?
                             first : second;
 
@@ -82,16 +83,17 @@ public class GuMaxWeightClique<V extends WeightedVertex,
         for (Collection<V> component : leaf.getAntiComponents()){
             if (component.size() == 1){ clique.addAll(component); }
             else {
-                V[] comp = (V[]) component.toArray();
-                V max = comp[0].getWeight() > comp[1].getWeight() ?
-                        comp[0] : comp[1];
+                ArrayList<V> comp = new ArrayList<>(component);
+
+                V max = comp.get(0).getWeight() > comp.get(1).getWeight() ?
+                        comp.get(0) : comp.get(1);
                 clique.add(max);
             }
         }
         return clique;
     }
 
-    private ArrayList<V> getMaxClique(DecompositionTreeNodeInterface<V, E> root){
+    public ArrayList<V> getMaxClique(DecompositionTreeNodeInterface<V, E> root){
         ArrayList<V> maxClique = null;
         if (root.isLeaf()){
             maxClique = maxCliqueInLeaf((DecompositionTreeLeaf<V, E>) root);
