@@ -8,6 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class IsBasicGuTest {
+
     GraphInterface<String, DefaultEdge> g1;
     String a = "a";
     String b = "b";
@@ -59,6 +60,7 @@ public class IsBasicGuTest {
         assertTrue(classifier.classify(g1));
     }
 
+
     @Test
     public void classifyTestK2() throws Exception {
         g1 = new SimpleUndirectedGraph<>(DefaultEdge.class);
@@ -99,6 +101,7 @@ public class IsBasicGuTest {
         assertTrue(classifier.classify(g1));
 
     }
+
 
     @Test
     public void classifyTestLongHole() throws  Exception {

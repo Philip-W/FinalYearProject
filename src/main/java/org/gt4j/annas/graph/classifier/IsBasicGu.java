@@ -93,6 +93,7 @@ public class IsBasicGu<V, E extends EdgeInterface<V>> implements
             return true;
         }
         else {
+
             lastClassifiedType = IsGu.Type.FALSE;
             return false;
         }
