@@ -3,6 +3,7 @@ package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.traverse.LexBFS;
+import org.gt4j.annas.graph.util.traverse.LexM;
 import org.gt4j.annas.util.SetManipulations;
 import sun.security.provider.certpath.Vertex;
 
@@ -51,7 +52,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *          Contains a LexBFS ordering
      */
     private List<V> getMinimalOrdering(SimpleUndirectedGraph<V, E> inputGraph){
-        LexBFS<V> lexBFS = new LexBFS<>(inputGraph);
+        //LexBFS<V> lex = new LexBFS<>(inputGraph);
         /**
         List<String> list = new ArrayList<>();
         list.add("l");
@@ -67,10 +68,11 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
 
         return (List<V>) list;
          */
-        List<V> l = lexBFS.getOrder();
-        System.out.println("order:");
-        System.out.println(l.toString());
-        return new ArrayList<>(lexBFS.getOrder());
+        LexM<V, E> lex = new LexM<>(inputGraph);
+        List<V> l = lex.getOrder();
+        //System.out.println("order:");
+        //System.out.println(l.toString());
+        return new ArrayList<>(l);
     }
 
     /**
@@ -132,8 +134,9 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         cvMap.clear();
         for (V vertex : g.getVertices()){
             for (E edge : g.getEdges(vertex)){
-                if (orderingMap.get(edge.getOtherEndpoint(vertex)) >
-                        orderingMap.get(vertex)){
+                int oV = orderingMap.get(vertex);
+                int oW = orderingMap.get(edge.getOtherEndpoint(vertex));
+                if (oW > oV){
                     cvMap.put(vertex, edge.getOtherEndpoint(vertex));
                 }
             }
@@ -148,14 +151,12 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
     private DecompositionTreeNodeInterface runDecomposition(){
         //Get Ordering
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(graph); }
-        //System.out.println(minimalOrder.toString());
-        Collections.reverse(minimalOrder);
-        //System.out.println(minimalOrder);
+
         // Generate fill in graph
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
         //System.out.println(fillInGraph.getEdges().toString());
+
         // Compute the sets C(v) for each vertex
-        //System.out.println(fillInGraph.getEdges());
         populateCv(fillInGraph);
 
         // Run the decomposition steps, returning the tree root.
@@ -184,7 +185,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         for (V currentVertex: ordering){
             ArrayList<V> neighbours = (ArrayList<V>) cvMap.get(currentVertex);
 
-            if (neighbours == null){continue;}
+            if (neighbours == null){neighbours = new ArrayList<>(); }
 
             if(Utilities.isClique(inputGraph, neighbours)){
                 List<V> aTemp = SetManipulations.
@@ -206,7 +207,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
-                    //System.out.println("decompose on: " + currentVertex);
+                    System.out.println("decompose on: " + currentVertex);
                     List<V> gPrimeSet = SetManipulations.union(setA, neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);
@@ -222,7 +223,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                     node = new DecompositionTreeInnerNode(cutsetGraph);
 
                     node.addLeaf(new DecompositionTreeLeaf(gPrime, cutsetGraph));
-
+                    node.setGraph((GraphInterface<V, E>) inputGraph);
                     //minimalOrder = getMinimalOrdering(gDoublePrime);
 
                     // Generate fill in graph

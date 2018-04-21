@@ -517,15 +517,7 @@ public class IsGuTest {
 
         DecompositionTreeInnerNode root =
                 (DecompositionTreeInnerNode) decomp.getDecomposition();
-/*
-        DecompositionTreeInnerNode rootNode = (DecompositionTreeInnerNode) root;
-        //DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root;
 
-        DecompositionTreeLeaf  leaf1 = (DecompositionTreeLeaf) rootNode.getLeaves().get(0);
-        System.out.println(leaf1.getGraph().getVertices());
-        //System.out.println(leaf.getBuType());
-
-        */
 
         while(root.getLeaves().size() != 2){
             DecompositionTreeLeaf leaf = (DecompositionTreeLeaf) root.getLeaves().get(0);
@@ -551,9 +543,64 @@ public class IsGuTest {
         System.out.println(leaf.getGraph().getVertices());
 
 
-
         IsGu<String, DefaultEdge> classify = new IsGu<>();
         assertTrue(classify.classifyTree(root));
+    }
+
+    @Test
+    public void test3PC() throws Exception {
+        g1 = new SimpleUndirectedGraph<>(DefaultEdge.class);
+        g1.addVertex(a); g1.addVertex(b); g1.addVertex(c);
+
+        g1.addVertex(d);
+        g1.addVertex(f);
+
+        g1.addVertex(g);
+        g1.addVertex(h);
+        g1.addVertex(i);
+        g1.addVertex(j);
+        g1.addVertex(k);
+        g1.addVertex(l);
+        g1.addVertex(m);
+        g1.addVertex(n);
+
+        g1.addEdge(a, b);
+        g1.addEdge(a, c);
+        g1.addEdge(c, b);
+
+        g1.addEdge(d, a);
+        g1.addEdge(d, b);
+        g1.addEdge(d, c);
+
+        g1.addEdge(f, a);
+        g1.addEdge(f, b);
+        g1.addEdge(f, c);
+
+        g1.addEdge(g, a);
+        g1.addEdge(g, b);
+        g1.addEdge(g, c);
+
+        g1.addEdge(g, h);
+        g1.addEdge(g, i);
+        g1.addEdge(g, j);
+
+
+        g1.addEdge(k, h);
+        g1.addEdge(l, i);
+        g1.addEdge(m, j);
+
+        g1.addEdge(k, n);
+        g1.addEdge(l, n);
+        g1.addEdge(m, n);
+
+        DecomposeByCliqueCutset<String, DefaultEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode root =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(!classify.classifyTree(root));
     }
 
 }
