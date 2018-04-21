@@ -150,6 +150,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
         if (minimalOrder == null){ minimalOrder = getMinimalOrdering(graph); }
         //System.out.println(minimalOrder.toString());
         Collections.reverse(minimalOrder);
+        //System.out.println(minimalOrder);
         // Generate fill in graph
         SimpleUndirectedGraph fillInGraph = (SimpleUndirectedGraph) getFillInSet(minimalOrder);
         //System.out.println(fillInGraph.getEdges().toString());
