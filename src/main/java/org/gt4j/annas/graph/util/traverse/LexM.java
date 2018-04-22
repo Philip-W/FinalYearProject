@@ -1,9 +1,7 @@
 package org.gt4j.annas.graph.util.traverse;
 
 
-import org.gt4j.annas.graph.EdgeInterface;
-import org.gt4j.annas.graph.MultiHashMap;
-import org.gt4j.annas.graph.SimpleUndirectedGraph;
+import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.util.Utilities;
 
 import java.util.*;
@@ -27,7 +25,7 @@ public class LexM<V, E extends EdgeInterface<V>>  {
 
     public LexM(SimpleUndirectedGraph<V, E> graph){
         this.graph = graph;
-        copy = Utilities.getCopy(graph);
+        copy = (SimpleUndirectedGraph<V, E>) Utilities.getCopy((SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge>) graph);
         lMap = new HashMap<>();
         alphaMap = new HashMap<>();
         inverseAlpha = new HashMap<>();

@@ -82,7 +82,7 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
      *          Copy of the input graph with additional fill in edges
      */
     GraphInterface<V, E> getFillInSet(List<V> ordering){
-        SimpleUndirectedGraph<V, E> fillInGraph = Utilities.getCopy(graph);
+        SimpleUndirectedGraph<V, E> fillInGraph = (SimpleUndirectedGraph<V, E>) Utilities.getCopy((SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge>) graph);
 
         //Map each vertex to it's ordering value allows fast (O(1)) association
         for (int i = 0; i < ordering.size(); i++){

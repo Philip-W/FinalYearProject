@@ -56,6 +56,7 @@ public final class Utilities {
 		return retval;
 	}
 
+	/*
     // Same as above but specific to simple undirected graphs
 	public static <V, E extends EdgeInterface<V>> SimpleUndirectedGraph<V, E>
 			getComplement(SimpleUndirectedGraph<V, E> graph) {
@@ -71,8 +72,8 @@ public final class Utilities {
 		}
 		return retval;
 	}
+*/
 
-/**
 	public static SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge>
 	getComplement(SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge> graph) {
 
@@ -88,7 +89,7 @@ public final class Utilities {
 		}
 		return retval;
 	}
-*/
+
 
 	/**
 	 * Makes a copy of the graph, the copy reuses the vertices but new edges are
@@ -103,6 +104,7 @@ public final class Utilities {
 	 * @return a copy of the provided graph
 	 */
 	@SuppressWarnings("unchecked")
+	/*
 	public static <V, E extends EdgeInterface<V>> GraphInterface<V, E> getCopy(GraphInterface<V, E> graph) {
 		GraphInterface<V, E> retval = null;
 
@@ -118,8 +120,8 @@ public final class Utilities {
 
 		return retval;
 	}
-
-
+*/
+/*
 	public static <V, E extends EdgeInterface<V>>SimpleUndirectedGraph<V, E> getCopy(SimpleUndirectedGraph<V, E> graph){
 		SimpleUndirectedGraph<V, E> copy = new SimpleUndirectedGraph<>((Class<E>) DefaultEdge.class);
 		copy.addVertices(graph.getVertices());
@@ -129,6 +131,20 @@ public final class Utilities {
 
 		return copy;
 	}
+*/
+
+	public static SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge>
+	getCopy(SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge> graph){
+		SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge> copy
+				= new SimpleUndirectedGraph<>(WeightedVertexEdge.class);
+		copy.addVertices(graph.getVertices());
+		for (WeightedVertexEdge e : graph.getEdges()){
+			copy.addEdge(e.getTail(), e.getHead());
+		}
+		return copy;
+	}
+
+
 
 	/**
 	 * Gets an undirected representation of the given graph

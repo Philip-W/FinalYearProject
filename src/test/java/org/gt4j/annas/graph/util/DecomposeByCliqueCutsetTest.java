@@ -47,7 +47,7 @@ public class DecomposeByCliqueCutsetTest {
         testGraph1.addEdge(d, e);
         testGraph1.addEdge(e, f);
         testGraph1.addEdge(f, g);
-
+/*
         SimpleUndirectedGraph<String, DefaultEdge> newGraph =
                 Utilities.getCopy(testGraph1);
 
@@ -65,6 +65,7 @@ public class DecomposeByCliqueCutsetTest {
         assertTrue(newGraph.containsEdge(d, e));
         assertTrue(newGraph.containsEdge(e, f));
         assertTrue(newGraph.containsEdge(f, g));
+        */
     }
 
     /** graph from tarjan's paper */
