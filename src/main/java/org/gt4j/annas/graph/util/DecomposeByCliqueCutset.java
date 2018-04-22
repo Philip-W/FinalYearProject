@@ -207,7 +207,6 @@ public class DecomposeByCliqueCutset<V, E extends EdgeInterface<V>> {
                List<V> setB = SetManipulations.removeAll(vertices, bTemp);
 
                 if (!setB.isEmpty()){
-                    System.out.println("decompose on: " + currentVertex);
                     List<V> gPrimeSet = SetManipulations.union(setA, neighbours);
                     SimpleUndirectedGraph gPrime = InducedSubgraph.inducedSubgraphOf(
                             inputGraph, gPrimeSet);
