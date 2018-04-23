@@ -57,7 +57,7 @@ public class GuGraphs {
     private static WeightedVertex a19 = new WeightedVertex("a19", 10);
     private static WeightedVertex a20 = new WeightedVertex("a20", 10);
     private static WeightedVertex a21 = new WeightedVertex("a21", 10);
-    private static WeightedVertex a22 = new WeightedVertex("a22", 10);
+    private static WeightedVertex a22 = new WeightedVertex("a22", 200);
     private static WeightedVertex a23 = new WeightedVertex("a23", 10);
     private static WeightedVertex a24 = new WeightedVertex("a24", 10);
 
@@ -507,7 +507,7 @@ public class GuGraphs {
         GraphData data = new GraphData();
         data.graph = g1;
         data.optimalColor = 6;
-        data.maxCliqueWeight = 75;
+        data.maxCliqueWeight = 88;
 
         return data;
 
@@ -857,6 +857,8 @@ public class GuGraphs {
         data.graph.addEdge(a22, a18);
         data.graph.addEdge(a22, a19);
         data.graph.addEdge(a22, a20);
+
+        data.maxCliqueWeight = 240;
 
         return data;
     }
