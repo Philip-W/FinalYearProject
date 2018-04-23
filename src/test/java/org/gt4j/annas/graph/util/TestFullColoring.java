@@ -44,7 +44,7 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         Set<V> vertices = root.getGraph().getVertices();
 
         for (V vertex : vertices){
-            System.out.println(vertex + " : " + root.getVertexColor(vertex));
+            //System.out.println(vertex + " : " + root.getVertexColor(vertex));
             Set<V> nVertex = new HashSet<>();
             Set<E> edges = root.getGraph().getEdges();
             for (E edge : edges){
@@ -223,7 +223,6 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
         int color = colour.setOptimalColoring();
 
-        System.out.println(color);
         assertTrue(color == GuGraphs.threeLongHoles().optimalColor);
         assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
 
@@ -247,7 +246,6 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
         int color = colour.setOptimalColoring();
 
-        System.out.println(color);
         assertTrue(color == GuGraphs.twoCutset().optimalColor);
         assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
     }
@@ -270,7 +268,6 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
         int color = colour.setOptimalColoring();
 
-        System.out.println(color);
         assertTrue(color == GuGraphs.largeGraph().optimalColor);
         assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
     }

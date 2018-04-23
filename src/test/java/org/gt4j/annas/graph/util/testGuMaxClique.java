@@ -2,6 +2,8 @@ package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.classifier.IsGu;
+import org.gt4j.annas.util.GraphData;
+import org.gt4j.annas.util.GuGraphs;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -23,6 +25,20 @@ public class testGuMaxClique {
     WeightedVertex l = new WeightedVertex("L", 12);
     WeightedVertex m = new WeightedVertex("M", 10);
 
+    SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge> graph;
+
+    /** Given a root and clique, will return the sum of max clique, used for testing
+     *
+     * @param clique
+     * @return
+     */
+    private int getCliqueWeight(ArrayList<WeightedVertex> clique){
+        int sum = 0;
+        for (WeightedVertex v : clique){
+            sum += v.getWeight();
+        }
+        return sum;
+    }
 
     @Test
     public void testWighted() throws Exception {
@@ -153,4 +169,49 @@ public class testGuMaxClique {
         }
 
     }
+
+
+    @Test
+    public void testTwoHoles() throws Exception {
+        graph = GuGraphs.twoLongHoles().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(graph);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+        GuMaxWeightClique<WeightedVertex, WeightedVertexEdge> clique =
+                new GuMaxWeightClique<>();
+
+        ArrayList<WeightedVertex> maxSet = clique.getMaxClique(node);
+        System.out.println(getCliqueWeight(maxSet));
+        assertTrue(getCliqueWeight(maxSet) == GuGraphs.twoLongHoles().maxCliqueWeight);
+    }
+
+    @Test
+    public void testThreeHoles() throws Exception {
+        graph = GuGraphs.threeLongHoles().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(graph);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+        GuMaxWeightClique<WeightedVertex, WeightedVertexEdge> clique =
+                new GuMaxWeightClique<>();
+
+        ArrayList<WeightedVertex> maxSet = clique.getMaxClique(node);
+        assertTrue(getCliqueWeight(maxSet) == GuGraphs.threeLongHoles().maxCliqueWeight);
+    }
+
 }

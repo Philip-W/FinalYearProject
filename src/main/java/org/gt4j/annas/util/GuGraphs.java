@@ -5,8 +5,8 @@ import org.gt4j.annas.graph.WeightedVertex;
 import org.gt4j.annas.graph.WeightedVertexEdge;
 
 public class GuGraphs {
-    private static WeightedVertex a = new WeightedVertex("a", 10);
-    private static WeightedVertex b = new WeightedVertex("b", 10);
+    private static WeightedVertex a = new WeightedVertex("a", 12);
+    private static WeightedVertex b = new WeightedVertex("b", 13);
     private static WeightedVertex c = new WeightedVertex("c", 10);
     private static WeightedVertex d = new WeightedVertex("d", 10);
     private static WeightedVertex e = new WeightedVertex("e", 10);
@@ -15,13 +15,13 @@ public class GuGraphs {
     private static WeightedVertex h = new WeightedVertex("h", 10);
     private static WeightedVertex i = new WeightedVertex("i", 10);
     private static WeightedVertex j = new WeightedVertex("j", 10);
-    private static WeightedVertex k = new WeightedVertex("k", 10);
-    private static WeightedVertex l = new WeightedVertex("l", 10);
-    private static WeightedVertex m = new WeightedVertex("m", 10);
+    private static WeightedVertex k = new WeightedVertex("k", 15);
+    private static WeightedVertex l = new WeightedVertex("l", 20);
+    private static WeightedVertex m = new WeightedVertex("m", 9);
     private static WeightedVertex n = new WeightedVertex("n", 10);
     private static WeightedVertex o = new WeightedVertex("o", 10);
-    private static WeightedVertex p = new WeightedVertex("p", 10);
-    private static WeightedVertex q = new WeightedVertex("q", 10);
+    private static WeightedVertex p = new WeightedVertex("p", 20);
+    private static WeightedVertex q = new WeightedVertex("q", 20);
     private static WeightedVertex r = new WeightedVertex("r", 10);
     private static WeightedVertex s = new WeightedVertex("s", 10);
     private static WeightedVertex t = new WeightedVertex("t", 10);
@@ -164,82 +164,7 @@ public class GuGraphs {
         return data;
     }
 
-    /** Gu graphs */
-    public static GraphData twoLongHoles(){
-        g1 = new SimpleUndirectedGraph<>(WeightedVertexEdge.class);
-        g1.addVertex(a); g1.addVertex(b); g1.addVertex(c);
-
-        g1.addVertex(d); g1.addVertex(e);
-        g1.addVertex(f); g1.addVertex(g);
-        g1.addVertex(h); //g1.addVertex(i);
-        g1.addVertex(j); g1.addVertex(k);
-        g1.addVertex(l); g1.addVertex(m);
-        g1.addVertex(n);
-
-        // Set Clique
-        g1.addEdge(a, b);
-        g1.addEdge(a, c);
-        g1.addEdge(c, b);
-
-        g1.addEdge(d, h);
-        g1.addEdge(h, g);
-        g1.addEdge(g, f);
-        g1.addEdge(f, e);
-        g1.addEdge(e, d);
-
-        g1.addEdge(d, a);
-        g1.addEdge(d, b);
-        g1.addEdge(d, c);
-
-        g1.addEdge(e, a);
-        g1.addEdge(e, b);
-        g1.addEdge(e, c);
-
-        g1.addEdge(f, a);
-        g1.addEdge(f, b);
-        g1.addEdge(f, c);
-
-        g1.addEdge(g, a);
-        g1.addEdge(g, b);
-        g1.addEdge(g, c);
-
-        g1.addEdge(h, a);
-        g1.addEdge(h, b);
-        g1.addEdge(h, c);
-
-        g1.addEdge(j, k);
-        g1.addEdge(k, l);
-        g1.addEdge(l, m);
-        g1.addEdge(m, n);
-        g1.addEdge(n, j);
-
-        g1.addEdge(j, a);
-        g1.addEdge(j, b);
-        g1.addEdge(j, c);
-
-        g1.addEdge(k, a);
-        g1.addEdge(k, b);
-        g1.addEdge(k, c);
-
-        g1.addEdge(l, a);
-        g1.addEdge(l, b);
-        g1.addEdge(l, c);
-
-        g1.addEdge(m, a);
-        g1.addEdge(m, b);
-        g1.addEdge(m, c);
-
-        g1.addEdge(n, a);
-        g1.addEdge(n, b);
-        g1.addEdge(n, c);
-
-        GraphData data = new GraphData();
-        data.graph = g1;
-        data.optimalColor = 6;
-
-        return data;
-    }
-
+    // Hole - CC - k2 - 3Clique
     public static GraphData mediumGraph(){
         g1 = new SimpleUndirectedGraph<>(WeightedVertexEdge.class);
         g1.addVertex(a); g1.addVertex(b); g1.addVertex(c);
@@ -349,6 +274,84 @@ public class GuGraphs {
         GraphData data = new GraphData();
         data.graph = g1;
         data.isGu = false;
+
+        return data;
+    }
+
+    /** Gu graphs */
+    public static GraphData twoLongHoles(){
+        g1 = new SimpleUndirectedGraph<>(WeightedVertexEdge.class);
+        g1.addVertex(a); g1.addVertex(b); g1.addVertex(c);
+
+        g1.addVertex(d); g1.addVertex(e);
+        g1.addVertex(f); g1.addVertex(g);
+        g1.addVertex(h); //g1.addVertex(i);
+        g1.addVertex(j); g1.addVertex(k);
+        g1.addVertex(l); g1.addVertex(m);
+        g1.addVertex(n);
+
+        // Set Clique
+        g1.addEdge(a, b);
+        g1.addEdge(a, c);
+        g1.addEdge(c, b);
+
+        g1.addEdge(d, h);
+        g1.addEdge(h, g);
+        g1.addEdge(g, f);
+        g1.addEdge(f, e);
+        g1.addEdge(e, d);
+
+        g1.addEdge(d, a);
+        g1.addEdge(d, b);
+        g1.addEdge(d, c);
+
+        g1.addEdge(e, a);
+        g1.addEdge(e, b);
+        g1.addEdge(e, c);
+
+        g1.addEdge(f, a);
+        g1.addEdge(f, b);
+        g1.addEdge(f, c);
+
+        g1.addEdge(g, a);
+        g1.addEdge(g, b);
+        g1.addEdge(g, c);
+
+        g1.addEdge(h, a);
+        g1.addEdge(h, b);
+        g1.addEdge(h, c);
+
+        // Second hole
+        g1.addEdge(j, k);
+        g1.addEdge(k, l);
+        g1.addEdge(l, m);
+        g1.addEdge(m, n);
+        g1.addEdge(n, j);
+
+        g1.addEdge(j, a);
+        g1.addEdge(j, b);
+        g1.addEdge(j, c);
+
+        g1.addEdge(k, a);
+        g1.addEdge(k, b);
+        g1.addEdge(k, c);
+
+        g1.addEdge(l, a);
+        g1.addEdge(l, b);
+        g1.addEdge(l, c);
+
+        g1.addEdge(m, a);
+        g1.addEdge(m, b);
+        g1.addEdge(m, c);
+
+        g1.addEdge(n, a);
+        g1.addEdge(n, b);
+        g1.addEdge(n, c);
+
+        GraphData data = new GraphData();
+        data.graph = g1;
+        data.optimalColor = 6;
+        data.maxCliqueWeight = 70;
 
         return data;
     }
@@ -465,6 +468,7 @@ public class GuGraphs {
         GraphData data = new GraphData();
         data.graph = g1;
         data.optimalColor = 6;
+        data.maxCliqueWeight = 75;
 
         return data;
 

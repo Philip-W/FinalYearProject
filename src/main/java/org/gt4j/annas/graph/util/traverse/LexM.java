@@ -45,7 +45,6 @@ public class LexM<V, E extends EdgeInterface<V>>  {
 
     public ArrayList<V> getOrder(){
         runLexM();
-        System.out.println(inverseAlpha);
         ArrayList<V> order = new ArrayList<>();
         for (int i = 0; i < graph.getOrder(); i++) {
             order.add(null);
@@ -56,7 +55,6 @@ public class LexM<V, E extends EdgeInterface<V>>  {
             order.set(ordering == 0 ? 0 : ordering -1 , v);
         }
 
-        //System.out.println(inverseAlpha);
         return order;
     }
 

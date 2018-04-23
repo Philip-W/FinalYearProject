@@ -376,8 +376,6 @@ public class DecomposeByCliqueCutsetTest {
 
     }
 
-
-
     @Test
     public void perfectElimination() throws Exception {
         testGraph1 = new SimpleUndirectedGraph<String, DefaultEdge>(DefaultEdge.class);
