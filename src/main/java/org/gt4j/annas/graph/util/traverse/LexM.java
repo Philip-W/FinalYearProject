@@ -145,7 +145,9 @@ public class LexM<V, E extends EdgeInterface<V>>  {
 
             Collections.sort(unnumbered,(a, b)
                     -> lMap.get(a) < lMap.get(b) ? -1
-                    : lMap.get(a) == lMap.get(b) ? 0 : 1);
+                    : lMap.get(a) == lMap.get(b) ? 0
+                    : lMap.get(a) > lMap.get(b) ? 1
+                    : -2);
 
             //System.out.println(unnumbered);
             //System.out.println(reach);

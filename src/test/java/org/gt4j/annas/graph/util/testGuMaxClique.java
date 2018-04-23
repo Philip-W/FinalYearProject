@@ -41,7 +41,7 @@ public class testGuMaxClique {
     }
 
     @Test
-    public void testWighted() throws Exception {
+    public void testWeighted() throws Exception {
         WeightedVertex v = new WeightedVertex("v", 10);
         WeightedVertex x = new WeightedVertex("x", 13);
 
@@ -164,13 +164,10 @@ public class testGuMaxClique {
                 new GuMaxWeightClique<>();
 
         //System.out.println(maxC.getMaxClique(node));
-        for (WeightedVertex v : maxC.getMaxClique(node)){
-            System.out.println(v.getIdentifier());
-        }
-
     }
 
 
+    /** Gu Graphs tests */
     @Test
     public void testTwoHoles() throws Exception {
         graph = GuGraphs.twoLongHoles().graph;
@@ -212,6 +209,66 @@ public class testGuMaxClique {
 
         ArrayList<WeightedVertex> maxSet = clique.getMaxClique(node);
         assertTrue(getCliqueWeight(maxSet) == GuGraphs.threeLongHoles().maxCliqueWeight);
+    }
+
+    @Test
+    public void testTwoCutset() throws Exception {
+        graph = GuGraphs.twoCutset().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(graph);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+        GuMaxWeightClique<WeightedVertex, WeightedVertexEdge> clique =
+                new GuMaxWeightClique<>();
+
+        ArrayList<WeightedVertex> maxSet = clique.getMaxClique(node);
+        assertTrue(getCliqueWeight(maxSet) == GuGraphs.twoCutset().maxCliqueWeight);
+    }
+
+    @Test
+    public void testLargeGraph() throws Exception {
+        graph = GuGraphs.largeGraph().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(graph);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+        GuMaxWeightClique<WeightedVertex, WeightedVertexEdge> clique =
+                new GuMaxWeightClique<>();
+
+        ArrayList<WeightedVertex> maxSet = clique.getMaxClique(node);
+        assertTrue(getCliqueWeight(maxSet) == GuGraphs.largeGraph().maxCliqueWeight);
+    }
+
+    @Test
+    public void testLargerGraph() throws Exception {
+        graph = GuGraphs.largerGraph().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(graph);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+        GuMaxWeightClique<WeightedVertex, WeightedVertexEdge> clique =
+                new GuMaxWeightClique<>();
+
+        ArrayList<WeightedVertex> maxSet = clique.getMaxClique(node);
+        assertTrue(getCliqueWeight(maxSet) == GuGraphs.largerGraph().maxCliqueWeight);
     }
 
 }

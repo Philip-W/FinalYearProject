@@ -39,7 +39,7 @@ public class GuMaxWeightClique<V extends WeightedVertex,
     public ArrayList<V> maxCliqueInLongHole(DecompositionTreeLeaf<V, E> leaf) {
         //HashSet<V> clique = new HashSet<>();
         HashSet<V> clique = new HashSet<>();
-        System.out.println(leaf.getGraph().getVertices());
+        //System.out.println(leaf.getGraph().getVertices());
         for (Collection<V> components : leaf.getAntiComponents()) {
             if (components.size() == 1) {
                 clique.addAll(components);

@@ -21,14 +21,53 @@ public class GuGraphs {
     private static WeightedVertex n = new WeightedVertex("n", 10);
     private static WeightedVertex o = new WeightedVertex("o", 10);
     private static WeightedVertex p = new WeightedVertex("p", 20);
-    private static WeightedVertex q = new WeightedVertex("q", 20);
-    private static WeightedVertex r = new WeightedVertex("r", 10);
+    private static WeightedVertex q = new WeightedVertex("q", 28);
+    private static WeightedVertex r = new WeightedVertex("r", 25);
     private static WeightedVertex s = new WeightedVertex("s", 10);
     private static WeightedVertex t = new WeightedVertex("t", 10);
     private static WeightedVertex u = new WeightedVertex("u", 10);
     private static WeightedVertex v = new WeightedVertex("v", 10);
-    private static WeightedVertex w = new WeightedVertex("w", 10);
+    private static WeightedVertex w = new WeightedVertex("w", 100);
     private static WeightedVertex x = new WeightedVertex("x", 10);
+    private static WeightedVertex y = new WeightedVertex("y", 10);
+    private static WeightedVertex z = new WeightedVertex("z", 10);
+
+    private static WeightedVertex a1 = new WeightedVertex("a1", 10);
+    private static WeightedVertex a2 = new WeightedVertex("a2", 10);
+    private static WeightedVertex a3 = new WeightedVertex("a3", 10);
+    private static WeightedVertex a4 = new WeightedVertex("a4", 10);
+    private static WeightedVertex a5 = new WeightedVertex("a5", 10);
+    private static WeightedVertex a6 = new WeightedVertex("a6", 10);
+
+    private static WeightedVertex a7 = new WeightedVertex("a7", 10);
+    private static WeightedVertex a8 = new WeightedVertex("a8", 10);
+    private static WeightedVertex a9 = new WeightedVertex("a9", 10);
+    private static WeightedVertex a10 = new WeightedVertex("a10", 10);
+    private static WeightedVertex a11 = new WeightedVertex("a11", 10);
+    private static WeightedVertex a12 = new WeightedVertex("a12", 10);
+
+    private static WeightedVertex a13 = new WeightedVertex("a13", 10);
+    private static WeightedVertex a14 = new WeightedVertex("a14", 10);
+    private static WeightedVertex a15 = new WeightedVertex("a15", 10);
+    private static WeightedVertex a16 = new WeightedVertex("a16", 10);
+    private static WeightedVertex a17 = new WeightedVertex("a17", 10);
+    private static WeightedVertex a18 = new WeightedVertex("a18", 10);
+
+
+    private static WeightedVertex a19 = new WeightedVertex("a19", 10);
+    private static WeightedVertex a20 = new WeightedVertex("a20", 10);
+    private static WeightedVertex a21 = new WeightedVertex("a21", 10);
+    private static WeightedVertex a22 = new WeightedVertex("a22", 10);
+    private static WeightedVertex a23 = new WeightedVertex("a23", 10);
+    private static WeightedVertex a24 = new WeightedVertex("a24", 10);
+
+    private static WeightedVertex a25 = new WeightedVertex("a25", 10);
+    private static WeightedVertex a26 = new WeightedVertex("a26", 10);
+    private static WeightedVertex a27 = new WeightedVertex("a27", 10);
+    private static WeightedVertex a28 = new WeightedVertex("a28", 10);
+    private static WeightedVertex a29 = new WeightedVertex("a29", 10);
+    private static WeightedVertex a30 = new WeightedVertex("a30", 10);
+
 
 
     private static SimpleUndirectedGraph<WeightedVertex, WeightedVertexEdge> g1;
@@ -564,11 +603,13 @@ public class GuGraphs {
         GraphData data = new GraphData();
         data.graph = g1;
         data.optimalColor = 6;
+        data.maxCliqueWeight = 70;
 
         return data;
 
     }
 
+    // 23 vertices
     public static GraphData largeGraph(){
         g1 = new SimpleUndirectedGraph<>(WeightedVertexEdge.class);
         g1.addVertex(a); g1.addVertex(b); g1.addVertex(c);
@@ -675,8 +716,148 @@ public class GuGraphs {
         GraphData data = new GraphData();
         data.graph = g1;
         data.optimalColor = 6;
+        data.maxCliqueWeight = 120;
 
         return data;
     }
 
+    // 46 vertices
+    public static GraphData largerGraph(){
+        GraphData data = largeGraph();
+        data.graph.addVertex(a1);
+
+        data.graph.addVertex(a2);
+        data.graph.addVertex(a3);
+        data.graph.addVertex(a4);
+        data.graph.addVertex(a5);
+        data.graph.addVertex(a6);
+
+        data.graph.addVertex(a7);
+        data.graph.addVertex(a8);
+        data.graph.addVertex(a9);
+        data.graph.addVertex(a10);
+        data.graph.addVertex(a11);
+        data.graph.addVertex(a12);
+        data.graph.addVertex(a13);
+        data.graph.addVertex(a14);
+        data.graph.addVertex(a15);
+        data.graph.addVertex(a16);
+        data.graph.addVertex(a17);
+        data.graph.addVertex(a18);
+
+        // Add connection to last clique
+        data.graph.addEdge(a1, v);
+
+        // Add super long hole
+        data.graph.addEdge(a2, a3);
+        data.graph.addEdge(a3, a4);
+        data.graph.addEdge(a4, a5);
+        data.graph.addEdge(a5, a6);
+        data.graph.addEdge(a6, a7);
+        data.graph.addEdge(a7, a8);
+        data.graph.addEdge(a8, a9);
+        data.graph.addEdge(a9, a10);
+        data.graph.addEdge(a10, a11);
+        data.graph.addEdge(a11, a12);
+        data.graph.addEdge(a12, a13);
+        data.graph.addEdge(a13, a14);
+        data.graph.addEdge(a14, a2);
+
+        data.graph.addEdge(a1, a2);
+        data.graph.addEdge(a1, a3);
+        data.graph.addEdge(a1, a4);
+        data.graph.addEdge(a1, a5);
+        data.graph.addEdge(a1, a6);
+        data.graph.addEdge(a1, a7);
+        data.graph.addEdge(a1, a8);
+        data.graph.addEdge(a1, a9);
+        data.graph.addEdge(a1, a10);
+        data.graph.addEdge(a1, a11);
+        data.graph.addEdge(a1, a12);
+        data.graph.addEdge(a1, a13);
+        data.graph.addEdge(a1, a14);
+
+
+        data.graph.addVertex(a19);
+        data.graph.addVertex(a20);
+        data.graph.addVertex(a21);
+        data.graph.addVertex(a22);
+
+        data.graph.addEdge(a1, a15);
+        data.graph.addEdge(a1, a16);
+        data.graph.addEdge(a1, a17);
+        data.graph.addEdge(a1, a18);
+        data.graph.addEdge(a1, a19);
+        data.graph.addEdge(a1, a20);
+        data.graph.addEdge(a1, a21);
+        data.graph.addEdge(a1, a22);
+
+        // Add 4 k2s
+
+        // a15
+        data.graph.addEdge(a15, a17);
+        data.graph.addEdge(a15, a18);
+        data.graph.addEdge(a15, a19);
+        data.graph.addEdge(a15, a20);
+        data.graph.addEdge(a15, a21);
+        data.graph.addEdge(a15, a22);
+
+        //a16
+        data.graph.addEdge(a16, a17);
+        data.graph.addEdge(a16, a18);
+        data.graph.addEdge(a16, a19);
+        data.graph.addEdge(a16, a20);
+        data.graph.addEdge(a16, a21);
+        data.graph.addEdge(a16, a22);
+
+        // a17
+        data.graph.addEdge(a17, a16);
+        data.graph.addEdge(a17, a15);
+        data.graph.addEdge(a17, a19);
+        data.graph.addEdge(a17, a20);
+        data.graph.addEdge(a17, a21);
+        data.graph.addEdge(a17, a22);
+
+        // a18
+        data.graph.addEdge(a18, a16);
+        data.graph.addEdge(a18, a15);
+        data.graph.addEdge(a18, a19);
+        data.graph.addEdge(a18, a20);
+        data.graph.addEdge(a18, a21);
+        data.graph.addEdge(a18, a22);
+
+        // a19
+        data.graph.addEdge(a19, a15);
+        data.graph.addEdge(a19, a16);
+        data.graph.addEdge(a19, a17);
+        data.graph.addEdge(a19, a18);
+        data.graph.addEdge(a19, a21);
+        data.graph.addEdge(a19, a22);
+
+        // a20
+        data.graph.addEdge(a20, a15);
+        data.graph.addEdge(a20, a16);
+        data.graph.addEdge(a20, a17);
+        data.graph.addEdge(a20, a18);
+        data.graph.addEdge(a20, a21);
+        data.graph.addEdge(a20, a22);
+
+        // a21
+        data.graph.addEdge(a21, a15);
+        data.graph.addEdge(a21, a16);
+        data.graph.addEdge(a21, a17);
+        data.graph.addEdge(a21, a18);
+        data.graph.addEdge(a21, a19);
+        data.graph.addEdge(a21, a20);
+
+        // a22
+        data.graph.addEdge(a22, a15);
+        data.graph.addEdge(a22, a16);
+        data.graph.addEdge(a22, a17);
+        data.graph.addEdge(a22, a18);
+        data.graph.addEdge(a22, a19);
+        data.graph.addEdge(a22, a20);
+
+        return data;
+    }
 }

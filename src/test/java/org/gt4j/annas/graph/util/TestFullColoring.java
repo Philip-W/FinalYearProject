@@ -272,4 +272,26 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
     }
 
+    @Test
+    public void testLarger(){
+        g1 = GuGraphs.largerGraph().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+
+        OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
+        int color = colour.setOptimalColoring();
+
+        assertTrue(color == GuGraphs.largerGraph().optimalColor);
+        assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
+    }
+
 }
