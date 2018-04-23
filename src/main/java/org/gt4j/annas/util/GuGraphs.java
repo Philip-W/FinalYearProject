@@ -147,6 +147,7 @@ public class GuGraphs {
 
         GraphData data = new GraphData();
         data.graph = g1;
+        data.isGu = false;
 
         return data;
     }

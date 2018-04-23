@@ -314,7 +314,6 @@ public class IsGuTest {
         assertTrue(!classify.classifyTree(root));
     }
 
-
     @Test
     public void testMediumTree() throws Exception {
         g1 = GuGraphs.mediumGraph().graph;
@@ -331,9 +330,28 @@ public class IsGuTest {
                 GuGraphs.mediumGraph().isGu);
     }
 
+    @Test
+    public void testHolesWithPath() throws Exception {
+        g1 = GuGraphs.twoLongHolesWith3PC().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeNodeInterface root =
+                 decomp.getDecomposition();
+
+        //printRoot(root);
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(root) ==
+                GuGraphs.twoLongHolesWith3PC().isGu);
+    }
+
+
     /******************************************************************/
     /** Gu Graphs                                                     */
     /******************************************************************/
+
+    /** All graphs are tested as part of the colouring and max clique tests */
 
     @Test
     public void testTwoLongHoles() throws Exception{
