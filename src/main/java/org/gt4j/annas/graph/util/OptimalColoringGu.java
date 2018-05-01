@@ -6,6 +6,7 @@ import org.gt4j.annas.graph.DecompositionTreeNodeInterface;
 import org.gt4j.annas.graph.EdgeInterface;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
@@ -111,17 +112,19 @@ public class OptimalColoringGu<V,  E extends EdgeInterface<V>>
         }
     }
 
-    public void setOptimalColoring(){
+    public int setOptimalColoring(){
         // Traverse tree, get coloring for each leaf
         // recursively permute the coloring from the bottom up.
-
         colorLeaves();
-        if ( root.isLeaf()){ return; }
-
-        colorDecompositionTree((DecompositionTreeInnerNode<V, E>) root);
-
+        if ( !root.isLeaf()) {
+            colorDecompositionTree((DecompositionTreeInnerNode<V, E>) root);
+        }
+        HashSet<Integer> set = new HashSet<>();
+        for (V v : root.getGraph().getVertices()){
+            set.add(root.getVertexColor(v));
+        }
+        return set.size();
     }
-
 
     @Override
     public Set<Set<V>> call() throws Exception {

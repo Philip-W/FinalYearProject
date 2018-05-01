@@ -2,6 +2,7 @@ package org.gt4j.annas.graph.util;
 
 import org.gt4j.annas.graph.*;
 import org.gt4j.annas.graph.classifier.IsGu;
+import org.gt4j.annas.util.GuGraphs;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,28 +12,28 @@ import java.util.Set;
 import static org.junit.Assert.assertTrue;
 
 public class TestFullColoring<V, E extends EdgeInterface<V>> {
-    SimpleUndirectedGraph <String, DefaultEdge> g1;
+    SimpleUndirectedGraph <WeightedVertex, WeightedVertexEdge> g1;
 
-    String a = "a";
-    String b = "b";
-    String c = "c";
-    String d = "d";
-    String e = "e";
-    String f = "f";
-    String g = "g";
-    String h = "h";
-    String i = "i";
-    String j = "j";
-    String k = "k" ;
-    String l = "l";
-    String m = "m";
-    String n = "n";
-    String o = "o";
-    String p = "p";
-    String q = "q";
-    String r = "r";
-    String s = "s";
-    String t = "t";
+    WeightedVertex a = new WeightedVertex("a", 10);
+    WeightedVertex b = new WeightedVertex("b", 10);
+    WeightedVertex c = new WeightedVertex("c", 10);
+    WeightedVertex d = new WeightedVertex("d", 10);
+    WeightedVertex e = new WeightedVertex("e", 10);
+    WeightedVertex f = new WeightedVertex("f", 10);
+    WeightedVertex g = new WeightedVertex("g", 10);
+    WeightedVertex h = new WeightedVertex("h", 10);
+    WeightedVertex i = new WeightedVertex("i", 10);
+    WeightedVertex j = new WeightedVertex("j", 10);
+    WeightedVertex k = new WeightedVertex("k", 10);
+    WeightedVertex l = new WeightedVertex("l", 10);
+    WeightedVertex m = new WeightedVertex("m", 10);
+    WeightedVertex n = new WeightedVertex("n", 10);
+    WeightedVertex o = new WeightedVertex("o", 10);
+    WeightedVertex p = new WeightedVertex("p", 10);
+    WeightedVertex q = new WeightedVertex("q", 10);
+    WeightedVertex r = new WeightedVertex("r", 10);
+    WeightedVertex s = new WeightedVertex("s", 10);
+    WeightedVertex t = new WeightedVertex("t", 10);
 
     /**
      * Ensures no two neighbours in a graph share the same colour
@@ -43,7 +44,7 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         Set<V> vertices = root.getGraph().getVertices();
 
         for (V vertex : vertices){
-            System.out.println(vertex + " : " + root.getVertexColor(vertex));
+            //System.out.println(vertex + " : " + root.getVertexColor(vertex));
             Set<V> nVertex = new HashSet<>();
             Set<E> edges = root.getGraph().getEdges();
             for (E edge : edges){
@@ -58,10 +59,9 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         return true;
     }
 
-
     @Test
     public void smallTree() throws Exception {
-        g1 = new SimpleUndirectedGraph<>(DefaultEdge.class);
+        g1 = new SimpleUndirectedGraph<>(WeightedVertexEdge.class);
         g1.addVertex(a); g1.addVertex(b); g1.addVertex(c);
 
         g1.addVertex(d); g1.addVertex(e);
@@ -127,7 +127,7 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
         g1.addEdge(m, b);
         g1.addEdge(m, c);
 
-
+/**
         ArrayList<String> cutset = new ArrayList<>();
         cutset.add(a); cutset.add(b); cutset.add(c);
 
@@ -160,6 +160,40 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
 
         node.addChild(decompLeafA);
         node.addChild(decompLeafB);
+ */
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+
+        OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
+        colour.setOptimalColoring();
+
+        //assertTrue(colour.computeColoring(leaf) == 6);
+
+        assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
+
+
+    }
+
+    @Test
+    public void twoLongHolesDecomp() throws  Exception {
+        g1 = GuGraphs.twoLongHoles().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
         IsGu<String, DefaultEdge> classify = new IsGu<>();
         assertTrue(classify.classifyTree(node));
 
@@ -169,7 +203,95 @@ public class TestFullColoring<V, E extends EdgeInterface<V>> {
 
         //assertTrue(colour.computeColoring(leaf) == 6);
         assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
+    }
 
+    @Test
+    public void threeLongHoles() {
+        g1 = GuGraphs.threeLongHoles().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+
+        OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
+        int color = colour.setOptimalColoring();
+
+        assertTrue(color == GuGraphs.threeLongHoles().optimalColor);
+        assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
 
     }
+
+    @Test
+    public void testTwoCutset() {
+        g1 = GuGraphs.twoCutset().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+
+        OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
+        int color = colour.setOptimalColoring();
+
+        assertTrue(color == GuGraphs.twoCutset().optimalColor);
+        assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
+    }
+
+    @Test
+    public void testLarge(){
+        g1 = GuGraphs.largeGraph().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+
+        OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
+        int color = colour.setOptimalColoring();
+
+        assertTrue(color == GuGraphs.largeGraph().optimalColor);
+        assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
+    }
+
+    @Test
+    public void testLarger(){
+        g1 = GuGraphs.largerGraph().graph;
+
+        DecomposeByCliqueCutset<WeightedVertex, WeightedVertexEdge> decomp =
+                new DecomposeByCliqueCutset<>(g1);
+
+        DecompositionTreeInnerNode node =
+                (DecompositionTreeInnerNode) decomp.getDecomposition();
+
+
+        IsGu<String, DefaultEdge> classify = new IsGu<>();
+        assertTrue(classify.classifyTree(node));
+
+
+        OptimalColoringGu<String, DefaultEdge> colour = new  OptimalColoringGu<>(node);
+        int color = colour.setOptimalColoring();
+
+        assertTrue(color == GuGraphs.largerGraph().optimalColor);
+        assertTrue(isColoured((DecompositionTreeNodeInterface<V, E>) node));
+    }
+
 }

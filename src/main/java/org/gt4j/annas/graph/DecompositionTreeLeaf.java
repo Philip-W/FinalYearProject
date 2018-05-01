@@ -125,10 +125,16 @@ public class DecompositionTreeLeaf <V, E extends EdgeInterface<V>> implements De
 
         colorToVertices.putAll(to ,setFrom);
         colorToVertices.putAll(from, setTo);
-
-        for (V v : setFrom){ vertexToColor.put(v, to); }
-
-        for (V v : setTo){ vertexToColor.put(v, from); }
+        if(setFrom != null) {
+            for (V v : setFrom) {
+                vertexToColor.put(v, to);
+            }
+        }
+        if (setTo != null) {
+            for (V v : setTo) {
+                vertexToColor.put(v, from);
+            }
+        }
     }
 
 

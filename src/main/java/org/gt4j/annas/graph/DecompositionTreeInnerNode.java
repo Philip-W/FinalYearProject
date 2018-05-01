@@ -66,6 +66,10 @@ public class DecompositionTreeInnerNode<V, E extends EdgeInterface<V>> implement
         if (!leaves.contains(leaf)){
             leaves.add(leaf);
         }
+        if (!children.contains(leaf)) {
+            children.add(leaf);
+        }
+
     }
 
     @Override

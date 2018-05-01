@@ -25,4 +25,8 @@ public class WeightedVertex {
     public void setIdentifier(Object identifier) {
         this.identifier = identifier;
     }
+
+    public String toString(){
+        return "{" + identifier.toString() + " : " + weight + "}";
+    }
 }

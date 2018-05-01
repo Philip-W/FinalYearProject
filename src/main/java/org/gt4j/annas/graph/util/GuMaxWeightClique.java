@@ -5,6 +5,8 @@ import org.gt4j.annas.graph.classifier.IsGu;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import java.util.HashSet;
 import java.util.Set;
 
 public class GuMaxWeightClique<V extends WeightedVertex,
@@ -34,24 +36,38 @@ public class GuMaxWeightClique<V extends WeightedVertex,
     }
 
 
-    public ArrayList<V> maxCliqueInLongHole(DecompositionTreeLeaf<V, E> leaf){
-        ArrayList<V> clique = new ArrayList<>();
-
-        for (Collection<V> components : leaf.getAntiComponents()){
-            if (components.size() == 1){
+    public ArrayList<V> maxCliqueInLongHole(DecompositionTreeLeaf<V, E> leaf) {
+        //HashSet<V> clique = new HashSet<>();
+        HashSet<V> clique = new HashSet<>();
+        //System.out.println(leaf.getGraph().getVertices());
+        for (Collection<V> components : leaf.getAntiComponents()) {
+            if (components.size() == 1) {
                 clique.addAll(components);
             }
 
             // Found the component with the long hole
             else {
                 int currentHighest = 0;
-                V highPairOne = null;
-                V highPairTwo = null;
+                WeightedVertex highPairOne = null;
+                WeightedVertex highPairTwo = null;
+                SimpleUndirectedGraph<V, E> copy
+                        =  InducedSubgraph.inducedSubgraphOf((SimpleUndirectedGraph<V, E>) leaf.getLeafGraph(), components);
+                int max = 0;
+                for (WeightedVertexEdge e : (Set<WeightedVertexEdge>) copy.getEdges()) {
+                    if (e.getHead().getWeight() + e.getTail().getWeight() > max) {
+                        highPairOne = e.getHead();
+                        highPairTwo = e.getTail();
+                        max = e.getHead().getWeight() + e.getTail().getWeight();
+                    }
+                }
+                clique.add((V) highPairOne);
+                clique.add((V) highPairTwo);
+                /*
                 for (V v : components) {
-                    Set<E> edgeSet =  leaf.getLeafGraph().getEdges(v);
+                    Set<E> edgeSet =  copy.getEdges();
                     ArrayList<E> edges = new ArrayList<>(edgeSet);
                     V first = edges.get(0).getOtherEndpoint(v);
-                    V second = edges.get(0).getOtherEndpoint(v);
+                    V second = edges.get(1).getOtherEndpoint(v);
                     V highest = first.getWeight() > second.getWeight() ?
                             first : second;
 
@@ -63,9 +79,11 @@ public class GuMaxWeightClique<V extends WeightedVertex,
                 }
                 clique.add(highPairOne);
                 clique.add(highPairTwo);
+            }*/
             }
+
         }
-        return clique;
+        return new ArrayList<>(clique);
     }
 
     /**
@@ -117,6 +135,9 @@ public class GuMaxWeightClique<V extends WeightedVertex,
 
         DecompositionTreeLeaf<V, E> max = leaves.get(0);
         for (DecompositionTreeLeaf leaf : leaves){
+            //System.out.println(leaf.getGraph().getVertices());
+            //System.out.println(leaf.getCliqueWeight());
+            //System.out.println("------------");
             if (leaf.getCliqueWeight() > max.getCliqueWeight()){
                 max = leaf;
             }
